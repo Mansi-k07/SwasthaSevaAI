@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SwasthaSevaAI Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        h1 {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #ccc;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background: #00c6ff;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            color: black;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #00a2d3;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            width: 200px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .card h2 {
+            font-size: 18px;
+            color: #00c6ff;
+        }
+
+        .card p {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>SwasthaSevaAI</h1>
+    <p class="subtitle">AI-Powered Hospital Intelligence Dashboard</p>
+
+    <button class="btn" onclick="predict()">Predict Patient Load</button>
+
+    <div class="card-container">
+
+        <div class="card">
+            <h2>Predicted Patients</h2>
+            <p id="patients">--</p>
+        </div>
+
+        <div class="card">
+            <h2>Doctors Needed</h2>
+            <p id="doctors">--</p>
+        </div>
+
+        <div class="card">
+            <h2>Peak Hour</h2>
+            <p id="peak">--</p>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+async function predict() {
+
+    try {
+
+        let response = await fetch("http://127.0.0.1:8000/predict");
+
+        let data = await response.json();
+
+        document.getElementById("patients").innerText = data.predicted_patients;
+
+        document.getElementById("doctors").innerText = data.doctors_needed;
+
+        document.getElementById("peak").innerText = data.peak_hour;
+
+    }
+
+    catch(error) {
+
+        alert("Backend not connected yet.");
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
