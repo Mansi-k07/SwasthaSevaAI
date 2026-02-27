@@ -1,19 +1,37 @@
 let chart;
 
+// ------------------------
+// Forecast Generator
+// ------------------------
 function generateDummyForecast(baseLoad) {
     let forecast = [];
-    for(let i=0;i<7;i++){
+    for(let i = 0; i < 7; i++){
         forecast.push(baseLoad + Math.floor(Math.random()*20 - 10));
     }
     return forecast;
 }
 
+
+// ------------------------
+// Risk + Doctor Logic
+// ------------------------
 function calculateRisk(load){
-    if(load < 150) return {level:"Low", class:"low", doctors:8};
-    if(load < 220) return {level:"Medium", class:"medium", doctors:10};
-    return {level:"High", class:"high", doctors:14};
+
+    let doctorsNeeded = Math.ceil(load / 15);
+
+    if(load < 150) 
+        return {level:"Low", class:"low", doctors: doctorsNeeded};
+
+    if(load < 220) 
+        return {level:"Medium", class:"medium", doctors: doctorsNeeded};
+
+    return {level:"High", class:"high", doctors: doctorsNeeded};
 }
 
+
+// ------------------------
+// MAIN PREDICT FUNCTION
+// ------------------------
 function predict(){
 
     let district = document.getElementById("district").value;
@@ -26,49 +44,53 @@ function predict(){
     if(district === "Gaya") baseLoad = 110;
     if(district === "Muzaffarpur") baseLoad = 125;
 
-    if(monsoon) baseLoad += 20;
-    if(outbreak) baseLoad += 35;
+    // Surge calculation
+    let surge = 0;
+    if(monsoon) surge += baseLoad * 0.2;
+    if(outbreak) surge += baseLoad * 0.3;
 
-    document.getElementById("load").innerText = baseLoad;
+    let predictedLoad = Math.floor(baseLoad + surge);
 
-    let riskData = calculateRisk(baseLoad);
+    document.getElementById("load").innerText = predictedLoad;
+
+    // Risk calculation
+    let riskData = calculateRisk(predictedLoad);
 
     let riskElement = document.getElementById("risk");
     riskElement.innerText = riskData.level;
     riskElement.className = "risk " + riskData.class;
 
-let loadElement = document.getElementById("load");
-let doctorElement = document.getElementById("doctors");
-let bedsElement = document.getElementById("beds");
-
-if(riskData.level === "High"){
-    loadElement.style.color = "#c62828";
-    doctorElement.style.color = "#c62828";
-    bedsElement.style.color = "#c62828";
-
-    document.getElementById("alertMessage").style.display = "block";
-}
-else if(riskData.level === "Medium"){
-    loadElement.style.color = "#f9a825";
-    doctorElement.style.color = "#f9a825";
-    bedsElement.style.color = "#f9a825";
-
-    document.getElementById("alertMessage").style.display = "none";
-}
-else{
-    loadElement.style.color = "#2e7d32";
-    doctorElement.style.color = "#2e7d32";
-    bedsElement.style.color = "#2e7d32";
-
-    document.getElementById("alertMessage").style.display = "none";
-}
-
     document.getElementById("doctors").innerText = riskData.doctors;
 
-    let bedsRequired = Math.floor(baseLoad * 0.3);
-document.getElementById("beds").innerText = bedsRequired;
+    let bedsRequired = Math.floor(predictedLoad * 0.3);
+    document.getElementById("beds").innerText = bedsRequired;
 
-    let forecast = generateDummyForecast(baseLoad);
+    // Color Logic
+    let loadElement = document.getElementById("load");
+    let doctorElement = document.getElementById("doctors");
+    let bedsElement = document.getElementById("beds");
+
+    if(riskData.level === "High"){
+        loadElement.style.color = "#c62828";
+        doctorElement.style.color = "#c62828";
+        bedsElement.style.color = "#c62828";
+        document.getElementById("alertMessage").style.display = "block";
+    }
+    else if(riskData.level === "Medium"){
+        loadElement.style.color = "#f9a825";
+        doctorElement.style.color = "#f9a825";
+        bedsElement.style.color = "#f9a825";
+        document.getElementById("alertMessage").style.display = "none";
+    }
+    else{
+        loadElement.style.color = "#2e7d32";
+        doctorElement.style.color = "#2e7d32";
+        bedsElement.style.color = "#2e7d32";
+        document.getElementById("alertMessage").style.display = "none";
+    }
+
+    // Chart
+    let forecast = generateDummyForecast(predictedLoad);
 
     if(chart) chart.destroy();
 
@@ -80,7 +102,7 @@ document.getElementById("beds").innerText = bedsRequired;
                 label: "7-Day Emergency Forecast",
                 data: forecast,
                 borderColor: "blue",
-                fill:false
+                fill: false
             }]
         }
     });
