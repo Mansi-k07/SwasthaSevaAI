@@ -15,7 +15,7 @@
  <p style="font-size:14px; color:#ff9933;">
 Ministry of Health & Family Welfare - Emergency Monitoring System
 </p>
-   
+
 <h1>SwasthaSevaAI</h1>
 <p class="subtitle">AI-Powered Emergency Intelligence Dashboard</p>
 
@@ -39,6 +39,10 @@ Ministry of Health & Family Welfare - Emergency Monitoring System
 
 <button onclick="predict()">Run AI Prediction</button>
 
+<p id="alertMessage" class="alert" style="display:none;">
+⚠ CRITICAL EMERGENCY SURGE ALERT
+</p>
+
 </div>
 
 <div class="card-container">
@@ -56,6 +60,11 @@ Ministry of Health & Family Welfare - Emergency Monitoring System
 <div class="card">
 <h2>Recommended Doctors</h2>
 <p id="doctors">--</p>
+</div>
+
+<div class="card">
+<h2>Bed Requirement</h2>
+<p id="beds">--</p>
 </div>
 
 </div>

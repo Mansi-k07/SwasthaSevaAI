@@ -37,7 +37,36 @@ function predict(){
     riskElement.innerText = riskData.level;
     riskElement.className = "risk " + riskData.class;
 
+let loadElement = document.getElementById("load");
+let doctorElement = document.getElementById("doctors");
+let bedsElement = document.getElementById("beds");
+
+if(riskData.level === "High"){
+    loadElement.style.color = "#c62828";
+    doctorElement.style.color = "#c62828";
+    bedsElement.style.color = "#c62828";
+
+    document.getElementById("alertMessage").style.display = "block";
+}
+else if(riskData.level === "Medium"){
+    loadElement.style.color = "#f9a825";
+    doctorElement.style.color = "#f9a825";
+    bedsElement.style.color = "#f9a825";
+
+    document.getElementById("alertMessage").style.display = "none";
+}
+else{
+    loadElement.style.color = "#2e7d32";
+    doctorElement.style.color = "#2e7d32";
+    bedsElement.style.color = "#2e7d32";
+
+    document.getElementById("alertMessage").style.display = "none";
+}
+
     document.getElementById("doctors").innerText = riskData.doctors;
+
+    let bedsRequired = Math.floor(baseLoad * 0.3);
+document.getElementById("beds").innerText = bedsRequired;
 
     let forecast = generateDummyForecast(baseLoad);
 
