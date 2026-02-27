@@ -5,6 +5,62 @@ let chart;
 // ------------------------
 function generateDummyForecast(baseLoad) {
     let forecast = [];
+    const hospitalData = {
+
+    "Bihar": {
+        "Patna": [
+            "Patna Medical College and Hospital (PMCH)",
+            "Indira Gandhi Institute of Medical Sciences (IGIMS)",
+            "AIIMS Patna"
+        ],
+        "Gaya": [
+            "ANMMCH",
+            "JPN Hospital Gaya",
+            "I.D Hospital Gaya"
+        ],
+        "Muzaffarpur": [
+            "SKMCH",
+            "Sadar Hospital Muzaffarpur",
+            "Homi Bhabha Cancer Hospital"
+        ]
+    },
+
+    "Uttar Pradesh": {
+        "Lucknow": [
+            "KGMU",
+            "SGPGIMS",
+            "Balrampur Hospital"
+        ],
+        "Gorakhpur": [
+            "AIIMS Gorakhpur",
+            "Netaji Subhash District Hospital",
+            "District Women Hospital"
+        ],
+        "Varanasi": [
+            "Lal Bahadur Shastri Hospital",
+            "Pandit Deen Dayal Hospital"
+        ]
+    },
+
+    "Jharkhand": {
+        "Ranchi": [
+            "RIMS",
+            "CIP",
+            "RINPAS"
+        ],
+        "Dhanbad": [
+            "Central Hospital",
+            "Sadar Hospital",
+            "Divisional Hospital"
+        ],
+        "Jamshedpur": [
+            "MGM Medical College",
+            "Sadar Hospital",
+            "Tata Main Hospital"
+        ]
+    }
+
+};
     for(let i = 0; i < 7; i++){
         forecast.push(baseLoad + Math.floor(Math.random()*20 - 10));
     }
@@ -106,4 +162,38 @@ function predict(){
             }]
         }
     });
+}
+// ------------------------
+// Dropdown Logic
+// ------------------------
+
+function updateDistricts(){
+
+    let state = document.getElementById("state").value;
+    let districtSelect = document.getElementById("district");
+    let hospitalSelect = document.getElementById("hospital");
+
+    districtSelect.innerHTML = "<option value=''>Select District</option>";
+    hospitalSelect.innerHTML = "<option value=''>Select Hospital</option>";
+
+    if(hospitalData[state]){
+        Object.keys(hospitalData[state]).forEach(district=>{
+            districtSelect.innerHTML += `<option value="${district}">${district}</option>`;
+        });
+    }
+}
+
+function updateHospitals(){
+
+    let state = document.getElementById("state").value;
+    let district = document.getElementById("district").value;
+    let hospitalSelect = document.getElementById("hospital");
+
+    hospitalSelect.innerHTML = "<option value=''>Select Hospital</option>";
+
+    if(hospitalData[state] && hospitalData[state][district]){
+        hospitalData[state][district].forEach(hospital=>{
+            hospitalSelect.innerHTML += `<option value="${hospital}">${hospital}</option>`;
+        });
+    }
 }
