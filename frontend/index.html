@@ -2,100 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>SwasthaSevaAI - Emergency Intelligence System</title>
+<title>SwasthaSevaAI - Emergency Intelligence</title>
 
+<link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-    color: white;
-    margin: 0;
-    padding: 0;
-    text-align:center;
-}
-
-.container {
-    padding: 30px;
-}
-
-h1 {
-    font-size: 36px;
-}
-
-.subtitle {
-    color: #ccc;
-    margin-bottom: 25px;
-}
-
-.controls {
-    margin-bottom:20px;
-}
-
-select, label {
-    padding:8px;
-    margin:5px;
-    border-radius:6px;
-}
-
-button {
-    background:#00c6ff;
-    border:none;
-    padding:12px 25px;
-    border-radius:8px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-button:hover {
-    background:#00a2d3;
-}
-
-.card-container {
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    margin-top:30px;
-    flex-wrap:wrap;
-}
-
-.card {
-    background:rgba(255,255,255,0.1);
-    padding:20px;
-    width:220px;
-    border-radius:12px;
-}
-
-.card h2 {
-    color:#00c6ff;
-    font-size:18px;
-}
-
-.card p {
-    font-size:26px;
-    font-weight:bold;
-}
-
-.risk {
-    font-size:22px;
-    padding:8px;
-    border-radius:6px;
-}
-
-.low { background:green; }
-.medium { background:orange; }
-.high { background:red; }
-
-canvas {
-    margin-top:40px;
-    background:white;
-    border-radius:12px;
-    padding:10px;
-}
-</style>
 </head>
-
 <body>
 
 <div class="container">
@@ -144,72 +56,11 @@ canvas {
 
 </div>
 
-<canvas id="forecastChart" width="600" height="300"></canvas>
+<canvas id="forecastChart"></canvas>
 
 </div>
 
-<script>
-
-let chart;
-
-function generateDummyForecast(baseLoad) {
-    let forecast = [];
-    for(let i=0;i<7;i++){
-        forecast.push(baseLoad + Math.floor(Math.random()*20 - 10));
-    }
-    return forecast;
-}
-
-function calculateRisk(load){
-    if(load < 120) return {level:"Low", class:"low", doctors:8};
-    if(load < 180) return {level:"Medium", class:"medium", doctors:10};
-    return {level:"High", class:"high", doctors:14};
-}
-
-function predict(){
-
-    let district = document.getElementById("district").value;
-    let monsoon = document.getElementById("monsoon").checked;
-    let outbreak = document.getElementById("outbreak").checked;
-
-    let baseLoad = 100;
-
-    if(district === "Patna") baseLoad = 140;
-    if(district === "Gaya") baseLoad = 110;
-    if(district === "Muzaffarpur") baseLoad = 125;
-
-    if(monsoon) baseLoad += 20;
-    if(outbreak) baseLoad += 35;
-
-    document.getElementById("load").innerText = baseLoad;
-
-    let riskData = calculateRisk(baseLoad);
-
-    let riskElement = document.getElementById("risk");
-    riskElement.innerText = riskData.level;
-    riskElement.className = "risk " + riskData.class;
-
-    document.getElementById("doctors").innerText = riskData.doctors;
-
-    let forecast = generateDummyForecast(baseLoad);
-
-    if(chart) chart.destroy();
-
-    chart = new Chart(document.getElementById("forecastChart"), {
-        type: 'line',
-        data: {
-            labels: ["Day1","Day2","Day3","Day4","Day5","Day6","Day7"],
-            datasets: [{
-                label: "7-Day Emergency Forecast",
-                data: forecast,
-                borderColor: "blue",
-                fill:false
-            }]
-        }
-    });
-}
-
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
