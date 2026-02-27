@@ -148,6 +148,16 @@ let baseLoad = 100;
 if(storedData){
     let parsed = JSON.parse(storedData);
     baseLoad = parsed.current_patients;
+
+    let availableBeds = "--";
+
+if(storedData){
+    let parsed = JSON.parse(storedData);
+
+    availableBeds = parsed.total_beds - parsed.occupied_beds;
+}
+
+document.getElementById("availableBeds").innerText = availableBeds;
 }
 
     // District base load
@@ -187,6 +197,14 @@ if(storedData){
 
     let bedsRequired = Math.floor(predictedLoad * 0.3);
     document.getElementById("beds").innerText = bedsRequired;
+   
+if(availableBeds < bedsRequired){
+    suggestionText.innerText =
+        "Warning: Bed shortage expected. Redirect patients.";
+    suggestionBox.style.display = "block";
+} else {
+    suggestionBox.style.display = "none";
+}
 
     // Alert & Color
     let loadElement = document.getElementById("load");
