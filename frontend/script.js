@@ -140,7 +140,15 @@ function predict(){
     let monsoon = document.getElementById("monsoon").checked;
     let outbreak = document.getElementById("outbreak").checked;
 
-    let baseLoad = 100;
+    // Check if admin data available
+let storedData = localStorage.getItem("hospitalLiveData");
+
+let baseLoad = 100;
+
+if(storedData){
+    let parsed = JSON.parse(storedData);
+    baseLoad = parsed.current_patients;
+}
 
     // District base load
     if(district === "Patna") baseLoad = 140;
