@@ -64,12 +64,20 @@ function submitData(){
     let total = document.getElementById("totalBeds").value;
     let doctors = document.getElementById("doctors").value;
 
-    // For now just simulate success
+    let hospitalData = {
+        current_patients: parseInt(patients),
+        occupied_beds: parseInt(occupied),
+        total_beds: parseInt(total),
+        doctors_on_duty: parseInt(doctors)
+    };
+
+    // Save to browser storage
+    localStorage.setItem("hospitalLiveData", JSON.stringify(hospitalData));
 
     document.getElementById("adminMessage").innerText =
-        "Data submitted successfully. AI prediction system updated.";
+        "Data submitted successfully. Dashboard updated.";
 
-}
+};
 
 </script>
 
