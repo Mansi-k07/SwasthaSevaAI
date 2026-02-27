@@ -1,79 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>SwasthaSevaAI - Emergency Intelligence</title>
-
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <title>SwasthaSevaAI</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
 <div class="container">
 
- <p style="font-size:14px; color:#ff9933;">
-Ministry of Health & Family Welfare - Emergency Monitoring System
-</p>
+    <h1>SwasthaSevaAI</h1>
 
-<h1>SwasthaSevaAI</h1>
-<p class="subtitle">AI-Powered Emergency Intelligence Dashboard</p>
+    <!-- Controls -->
+    <div class="controls">
 
-<div class="controls">
+        <select id="state" onchange="updateDistricts()">
+            <option value="">Select State</option>
+            <option value="Bihar">Bihar</option>
+            <option value="Uttar Pradesh">Uttar Pradesh</option>
+        </select>
 
-<select id="district">
-    <option value="Patna">Patna</option>
-    <option value="Gaya">Gaya</option>
-    <option value="Muzaffarpur">Muzaffarpur</option>
-</select>
+        <select id="district" onchange="updateHospitals()">
+            <option value="">Select District</option>
+        </select>
 
-<label>
-<input type="checkbox" id="monsoon"> Monsoon Season
-</label>
+        <select id="hospital">
+            <option value="">Select Hospital</option>
+        </select>
 
-<label>
-<input type="checkbox" id="outbreak"> Viral Outbreak
-</label>
+        <label>
+            <input type="checkbox" id="monsoon"> Monsoon
+        </label>
 
-<br><br>
+        <label>
+            <input type="checkbox" id="outbreak"> Viral Outbreak
+        </label>
 
-<button onclick="predict()">Run AI Prediction</button>
+        <button onclick="predict()">Run AI Prediction</button>
+    </div>
 
-<p id="alertMessage" class="alert" style="display:none;">
-⚠ CRITICAL EMERGENCY SURGE ALERT
-</p>
+    <!-- Alert -->
+    <p id="alertMessage" class="alert" style="display:none;">
+        ⚠ CRITICAL EMERGENCY SURGE ALERT
+    </p>
 
-</div>
+    <!-- Cards -->
+    <div class="card-container">
 
-<div class="card-container">
+        <div class="card">
+            <h2>Predicted Load</h2>
+            <p id="load">--</p>
+        </div>
 
-<div class="card">
-<h2>Today's Predicted Load</h2>
-<p id="load">--</p>
-</div>
+        <div class="card">
+            <h2>Risk Level</h2>
+            <p id="risk">--</p>
+        </div>
 
-<div class="card">
-<h2>Emergency Risk Index</h2>
-<p id="risk" class="risk">--</p>
-</div>
+        <div class="card">
+            <h2>Recommended Doctors</h2>
+            <p id="doctors">--</p>
+        </div>
 
-<div class="card">
-<h2>Recommended Doctors</h2>
-<p id="doctors">--</p>
-</div>
+        <div class="card">
+            <h2>Bed Requirement</h2>
+            <p id="beds">--</p>
+        </div>
 
-<div class="card">
-<h2>Bed Requirement</h2>
-<p id="beds">--</p>
-</div>
+    </div>
 
-</div>
+    <!-- Forecast -->
+    <canvas id="forecastChart"></canvas>
 
-<canvas id="forecastChart"></canvas>
+    <!-- Suggestion -->
+    <div id="suggestionBox" class="suggestion" style="display:none;">
+        <h3>Recommended Alternative Hospital</h3>
+        <p id="suggestionText"></p>
+    </div>
 
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
