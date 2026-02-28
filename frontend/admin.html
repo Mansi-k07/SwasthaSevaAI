@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SwasthaSevaAI - Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Hospital Admin Panel</h1>
+    <p class="subtitle">Data Entry & Resource Update System</p>
+
+    <!-- Login Section -->
+    <div id="loginSection">
+        <input type="text" id="username" placeholder="Enter Admin ID">
+        <input type="password" id="password" placeholder="Enter Password">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <!-- Admin Form -->
+    <div id="adminForm" style="display:none; margin-top:30px;">
+
+        <h2>Update Hospital Data</h2>
+
+        <label>Current Patients</label><br>
+        <input type="number" id="patients"><br><br>
+
+        <label>Occupied Beds</label><br>
+        <input type="number" id="occupiedBeds"><br><br>
+
+        <label>Total Beds</label><br>
+        <input type="number" id="totalBeds"><br><br>
+
+        <label>Doctors On Duty</label><br>
+        <input type="number" id="doctors"><br><br>
+
+        <button onclick="submitData()">Submit Data</button>
+
+        <p id="adminMessage" style="margin-top:15px; font-weight:bold;"></p>
+
+    </div>
+
+</div>
+
+<script>
+
+function login(){
+    let user = document.getElementById("username").value;
+    let pass = document.getElementById("password").value;
+
+    if(user === "admin" && pass === "1234"){
+        document.getElementById("loginSection").style.display = "none";
+        document.getElementById("adminForm").style.display = "block";
+    } else {
+        alert("Invalid Credentials");
+    }
+}
+
+function submitData(){
+
+    let patients = document.getElementById("patients").value;
+    let occupied = document.getElementById("occupiedBeds").value;
+    let total = document.getElementById("totalBeds").value;
+    let doctors = document.getElementById("doctors").value;
+
+    let hospitalData = {
+        current_patients: parseInt(patients),
+        occupied_beds: parseInt(occupied),
+        total_beds: parseInt(total),
+        doctors_on_duty: parseInt(doctors)
+    };
+
+    // Save to browser storage
+    localStorage.setItem("hospitalLiveData", JSON.stringify(hospitalData));
+
+    document.getElementById("adminMessage").innerText =
+        "Data submitted successfully. Dashboard updated.";
+
+};
+
+</script>
+
+</body>
+</html>
