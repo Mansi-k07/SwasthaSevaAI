@@ -1,74 +1,236 @@
 let chart;
 
+// ------------------------
+// FULL STATE → DISTRICT → HOSPITAL DATA
+// ------------------------
+
+const hospitalData = {
+
+    "Bihar": {
+        "Patna": [
+            "Patna Medical College and Hospital (PMCH)",
+            "Indira Gandhi Institute of Medical Sciences (IGIMS)",
+            "AIIMS Patna"
+        ],
+        "Gaya": [
+            "ANMMCH",
+            "JPN Hospital Gaya",
+            "I.D Hospital Gaya"
+        ],
+        "Muzaffarpur": [
+            "SKMCH",
+            "Sadar Hospital Muzaffarpur",
+            "Homi Bhabha Cancer Hospital"
+        ]
+    },
+
+    "Uttar Pradesh": {
+        "Lucknow": [
+            "KGMU",
+            "SGPGIMS",
+            "Balrampur Hospital"
+        ],
+        "Gorakhpur": [
+            "AIIMS Gorakhpur",
+            "Netaji Subhash District Hospital",
+            "District Women Hospital"
+        ],
+        "Varanasi": [
+            "Lal Bahadur Shastri Hospital",
+            "Pandit Deen Dayal Hospital"
+        ]
+    },
+
+    "Jharkhand": {
+        "Ranchi": [
+            "RIMS",
+            "CIP",
+            "RINPAS"
+        ],
+        "Dhanbad": [
+            "Central Hospital",
+            "Sadar Hospital",
+            "Divisional Hospital"
+        ],
+        "Jamshedpur": [
+            "MGM Medical College",
+            "Sadar Hospital",
+            "Tata Main Hospital"
+        ]
+    }
+};
+
+
+// ------------------------
+// DROPDOWN LOGIC
+// ------------------------
+
+function updateDistricts(){
+
+    let state = document.getElementById("state").value;
+    let districtSelect = document.getElementById("district");
+    let hospitalSelect = document.getElementById("hospital");
+
+    districtSelect.innerHTML = "<option value=''>Select District</option>";
+    hospitalSelect.innerHTML = "<option value=''>Select Hospital</option>";
+
+    if(hospitalData[state]){
+        Object.keys(hospitalData[state]).forEach(district=>{
+            districtSelect.innerHTML += `<option value="${district}">${district}</option>`;
+        });
+    }
+}
+
+function updateHospitals(){
+
+    let state = document.getElementById("state").value;
+    let district = document.getElementById("district").value;
+    let hospitalSelect = document.getElementById("hospital");
+
+    hospitalSelect.innerHTML = "<option value=''>Select Hospital</option>";
+
+    if(hospitalData[state] && hospitalData[state][district]){
+        hospitalData[state][district].forEach(hospital=>{
+            hospitalSelect.innerHTML += `<option value="${hospital}">${hospital}</option>`;
+        });
+    }
+}
+
+
+// ------------------------
+// FORECAST GENERATOR
+// ------------------------
+
 function generateDummyForecast(baseLoad) {
     let forecast = [];
-    for(let i=0;i<7;i++){
+    for(let i = 0; i < 7; i++){
         forecast.push(baseLoad + Math.floor(Math.random()*20 - 10));
     }
     return forecast;
 }
 
+
+// ------------------------
+// RISK + DOCTOR LOGIC
+// ------------------------
+
 function calculateRisk(load){
-    if(load < 150) return {level:"Low", class:"low", doctors:8};
-    if(load < 220) return {level:"Medium", class:"medium", doctors:10};
-    return {level:"High", class:"high", doctors:14};
+
+    let doctorsNeeded = Math.ceil(load / 15);
+
+    if(load < 150) 
+        return {level:"Low", class:"low", doctors: doctorsNeeded};
+
+    if(load < 220) 
+        return {level:"Medium", class:"medium", doctors: doctorsNeeded};
+
+    return {level:"High", class:"high", doctors: doctorsNeeded};
 }
+
+
+// ------------------------
+// MAIN PREDICT FUNCTION
+// ------------------------
 
 function predict(){
 
     let district = document.getElementById("district").value;
+    let hospital = document.getElementById("hospital").value;
     let monsoon = document.getElementById("monsoon").checked;
     let outbreak = document.getElementById("outbreak").checked;
 
-    let baseLoad = 100;
+    // Admin live data (if available)
+    let storedData = localStorage.getItem("hospitalLiveData");
 
+    let baseLoad = 100;
+    let availableBeds = 0;
+
+    if(storedData){
+        let parsed = JSON.parse(storedData);
+        baseLoad = parsed.current_patients;
+        availableBeds = parsed.total_beds - parsed.occupied_beds;
+        document.getElementById("availableBeds").innerText = availableBeds;
+    }
+
+    // District base load
     if(district === "Patna") baseLoad = 140;
     if(district === "Gaya") baseLoad = 110;
     if(district === "Muzaffarpur") baseLoad = 125;
+    if(district === "Lucknow") baseLoad = 150;
+    if(district === "Ranchi") baseLoad = 135;
 
-    if(monsoon) baseLoad += 20;
-    if(outbreak) baseLoad += 35;
+    // Hospital specific adjustment
+    if(hospital.includes("PMCH")) baseLoad = 180;
+    if(hospital.includes("IGIMS")) baseLoad = 130;
+    if(hospital.includes("AIIMS")) baseLoad = 110;
+    if(hospital.includes("KGMU")) baseLoad = 160;
+    if(hospital.includes("RIMS")) baseLoad = 150;
 
-    document.getElementById("load").innerText = baseLoad;
+    // Surge calculation
+    let surge = 0;
+    if(monsoon) surge += baseLoad * 0.2;
+    if(outbreak) surge += baseLoad * 0.3;
 
-    let riskData = calculateRisk(baseLoad);
+    let predictedLoad = Math.floor(baseLoad + surge);
+
+    document.getElementById("load").innerText = predictedLoad;
+
+    // Risk calculation
+    let riskData = calculateRisk(predictedLoad);
 
     let riskElement = document.getElementById("risk");
     riskElement.innerText = riskData.level;
     riskElement.className = "risk " + riskData.class;
 
-let loadElement = document.getElementById("load");
-let doctorElement = document.getElementById("doctors");
-let bedsElement = document.getElementById("beds");
-
-if(riskData.level === "High"){
-    loadElement.style.color = "#c62828";
-    doctorElement.style.color = "#c62828";
-    bedsElement.style.color = "#c62828";
-
-    document.getElementById("alertMessage").style.display = "block";
-}
-else if(riskData.level === "Medium"){
-    loadElement.style.color = "#f9a825";
-    doctorElement.style.color = "#f9a825";
-    bedsElement.style.color = "#f9a825";
-
-    document.getElementById("alertMessage").style.display = "none";
-}
-else{
-    loadElement.style.color = "#2e7d32";
-    doctorElement.style.color = "#2e7d32";
-    bedsElement.style.color = "#2e7d32";
-
-    document.getElementById("alertMessage").style.display = "none";
-}
-
     document.getElementById("doctors").innerText = riskData.doctors;
 
-    let bedsRequired = Math.floor(baseLoad * 0.3);
-document.getElementById("beds").innerText = bedsRequired;
+    let bedsRequired = Math.floor(predictedLoad * 0.3);
+    document.getElementById("beds").innerText = bedsRequired;
 
-    let forecast = generateDummyForecast(baseLoad);
+    // Alert & Color logic
+    let loadElement = document.getElementById("load");
+    let doctorElement = document.getElementById("doctors");
+    let bedsElement = document.getElementById("beds");
+
+    if(riskData.level === "High"){
+        loadElement.style.color = "#c62828";
+        doctorElement.style.color = "#c62828";
+        bedsElement.style.color = "#c62828";
+        document.getElementById("alertMessage").style.display = "block";
+    }
+    else if(riskData.level === "Medium"){
+        loadElement.style.color = "#f9a825";
+        doctorElement.style.color = "#f9a825";
+        bedsElement.style.color = "#f9a825";
+        document.getElementById("alertMessage").style.display = "none";
+    }
+    else{
+        loadElement.style.color = "#2e7d32";
+        doctorElement.style.color = "#2e7d32";
+        bedsElement.style.color = "#2e7d32";
+        document.getElementById("alertMessage").style.display = "none";
+    }
+
+    // Suggestion logic
+    let suggestionBox = document.getElementById("suggestionBox");
+    let suggestionText = document.getElementById("suggestionText");
+
+    if(availableBeds < bedsRequired){
+        suggestionText.innerText =
+            "Warning: Bed shortage expected. Redirect patients.";
+        suggestionBox.style.display = "block";
+    }
+    else if(riskData.level === "High"){
+        suggestionText.innerText =
+            "Redirect patients to alternative hospital within district.";
+        suggestionBox.style.display = "block";
+    }
+    else{
+        suggestionBox.style.display = "none";
+    }
+
+    // Chart
+    let forecast = generateDummyForecast(predictedLoad);
 
     if(chart) chart.destroy();
 
@@ -80,7 +242,7 @@ document.getElementById("beds").innerText = bedsRequired;
                 label: "7-Day Emergency Forecast",
                 data: forecast,
                 borderColor: "blue",
-                fill:false
+                fill: false
             }]
         }
     });

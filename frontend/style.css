@@ -105,3 +105,12 @@ canvas {
     50% { opacity: 0.3; }
     100% { opacity: 1; }
 }
+
+.suggestion {
+    margin-top: 25px;
+    padding: 15px;
+    background: #e3f2fd;
+    border-left: 6px solid #0b3d91;
+    border-radius: 6px;
+    font-weight: 500;
+}
