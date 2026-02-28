@@ -58,12 +58,11 @@ const hospitalData = {
             "Tata Main Hospital"
         ]
     }
-
 };
 
 
 // ------------------------
-// Dropdown Logic
+// DROPDOWN LOGIC
 // ------------------------
 
 function updateDistricts(){
@@ -99,7 +98,7 @@ function updateHospitals(){
 
 
 // ------------------------
-// Forecast Generator
+// FORECAST GENERATOR
 // ------------------------
 
 function generateDummyForecast(baseLoad) {
@@ -112,7 +111,7 @@ function generateDummyForecast(baseLoad) {
 
 
 // ------------------------
-// Risk + Doctor Logic
+// RISK + DOCTOR LOGIC
 // ------------------------
 
 function calculateRisk(load){
@@ -140,25 +139,18 @@ function predict(){
     let monsoon = document.getElementById("monsoon").checked;
     let outbreak = document.getElementById("outbreak").checked;
 
-    // Check if admin data available
-let storedData = localStorage.getItem("hospitalLiveData");
+    // Admin live data (if available)
+    let storedData = localStorage.getItem("hospitalLiveData");
 
-let baseLoad = 100;
+    let baseLoad = 100;
+    let availableBeds = 0;
 
-if(storedData){
-    let parsed = JSON.parse(storedData);
-    baseLoad = parsed.current_patients;
-
-    let availableBeds = "--";
-
-if(storedData){
-    let parsed = JSON.parse(storedData);
-
-    availableBeds = parsed.total_beds - parsed.occupied_beds;
-}
-
-document.getElementById("availableBeds").innerText = availableBeds;
-}
+    if(storedData){
+        let parsed = JSON.parse(storedData);
+        baseLoad = parsed.current_patients;
+        availableBeds = parsed.total_beds - parsed.occupied_beds;
+        document.getElementById("availableBeds").innerText = availableBeds;
+    }
 
     // District base load
     if(district === "Patna") baseLoad = 140;
@@ -167,7 +159,7 @@ document.getElementById("availableBeds").innerText = availableBeds;
     if(district === "Lucknow") baseLoad = 150;
     if(district === "Ranchi") baseLoad = 135;
 
-    // Hospital-wise dynamic load
+    // Hospital specific adjustment
     if(hospital.includes("PMCH")) baseLoad = 180;
     if(hospital.includes("IGIMS")) baseLoad = 130;
     if(hospital.includes("AIIMS")) baseLoad = 110;
@@ -179,14 +171,11 @@ document.getElementById("availableBeds").innerText = availableBeds;
     if(monsoon) surge += baseLoad * 0.2;
     if(outbreak) surge += baseLoad * 0.3;
 
-    // AI logic concept:
-    // Predicted = CurrentPatients + Surge
-
     let predictedLoad = Math.floor(baseLoad + surge);
 
     document.getElementById("load").innerText = predictedLoad;
 
-    // Risk
+    // Risk calculation
     let riskData = calculateRisk(predictedLoad);
 
     let riskElement = document.getElementById("risk");
@@ -197,16 +186,8 @@ document.getElementById("availableBeds").innerText = availableBeds;
 
     let bedsRequired = Math.floor(predictedLoad * 0.3);
     document.getElementById("beds").innerText = bedsRequired;
-   
-if(availableBeds < bedsRequired){
-    suggestionText.innerText =
-        "Warning: Bed shortage expected. Redirect patients.";
-    suggestionBox.style.display = "block";
-} else {
-    suggestionBox.style.display = "none";
-}
 
-    // Alert & Color
+    // Alert & Color logic
     let loadElement = document.getElementById("load");
     let doctorElement = document.getElementById("doctors");
     let bedsElement = document.getElementById("beds");
@@ -234,10 +215,17 @@ if(availableBeds < bedsRequired){
     let suggestionBox = document.getElementById("suggestionBox");
     let suggestionText = document.getElementById("suggestionText");
 
-    if(riskData.level === "High"){
-        suggestionText.innerText = "Redirect patients to alternative hospital within district.";
+    if(availableBeds < bedsRequired){
+        suggestionText.innerText =
+            "Warning: Bed shortage expected. Redirect patients.";
         suggestionBox.style.display = "block";
-    } else {
+    }
+    else if(riskData.level === "High"){
+        suggestionText.innerText =
+            "Redirect patients to alternative hospital within district.";
+        suggestionBox.style.display = "block";
+    }
+    else{
         suggestionBox.style.display = "none";
     }
 
