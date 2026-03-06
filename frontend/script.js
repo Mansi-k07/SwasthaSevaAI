@@ -132,7 +132,7 @@ function calculateRisk(load){
 // MAIN PREDICT FUNCTION
 // ------------------------
 
-function predict(){
+
 
 async function predict(){
 
@@ -175,7 +175,6 @@ async function predict(){
         document.getElementById("beds").innerText = data.beds_required;
 
         let risk = data.risk_level;
-
         let riskElement = document.getElementById("risk");
         riskElement.innerText = risk;
 
@@ -289,4 +288,4 @@ async function predict(){
             }]
         }
     });
-}
+    
