@@ -134,23 +134,66 @@ function calculateRisk(load){
 
 function predict(){
 
+async function predict(){
+
     let district = document.getElementById("district").value;
-    let hospital = document.getElementById("hospital").value;
     let monsoon = document.getElementById("monsoon").checked;
     let outbreak = document.getElementById("outbreak").checked;
 
-    // Admin live data (if available)
     let storedData = localStorage.getItem("hospitalLiveData");
 
-    let baseLoad = 100;
-    let availableBeds = 0;
-
-    if(storedData){
-        let parsed = JSON.parse(storedData);
-        baseLoad = parsed.current_patients;
-        availableBeds = parsed.total_beds - parsed.occupied_beds;
-        document.getElementById("availableBeds").innerText = availableBeds;
+    if(!storedData){
+        alert("Admin data not found. Please enter hospital data first.");
+        return;
     }
+
+    let parsed = JSON.parse(storedData);
+
+    let payload = {
+        district: district,
+        current_patients: parsed.current_patients,
+        occupied_beds: parsed.occupied_beds,
+        total_beds: parsed.total_beds,
+        doctors_on_duty: parsed.doctors_on_duty,
+        monsoon: monsoon,
+        viral_outbreak: outbreak
+    };
+
+    try{
+
+        let response = await fetch("http://127.0.0.1:8000/predict",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        let data = await response.json();
+
+        document.getElementById("load").innerText = data.predicted_patients;
+        document.getElementById("beds").innerText = data.beds_required;
+
+        let risk = data.risk_level;
+
+        let riskElement = document.getElementById("risk");
+        riskElement.innerText = risk;
+
+        if(risk === "RED"){
+            riskElement.className = "risk high";
+        }
+        else if(risk === "YELLOW"){
+            riskElement.className = "risk medium";
+        }
+        else{
+            riskElement.className = "risk low";
+        }
+
+    }catch(error){
+        alert("Backend connection failed");
+    }
+
+}
 
     // District base load
     if(district === "Patna") baseLoad = 140;
