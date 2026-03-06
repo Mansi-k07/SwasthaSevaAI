@@ -256,23 +256,29 @@ async function predict(){
         document.getElementById("alertMessage").style.display = "none";
     }
 
-    // Suggestion logic
+   // Suggestion logic
     let suggestionBox = document.getElementById("suggestionBox");
     let suggestionText = document.getElementById("suggestionText");
 
-    if(availableBeds < bedsRequired){
-        suggestionText.innerText =
-            "Warning: Bed shortage expected. Redirect patients.";
-        suggestionBox.style.display = "block";
-    }
-    else if(riskData.level === "High"){
-        suggestionText.innerText =
-            "Redirect patients to alternative hospital within district.";
-        suggestionBox.style.display = "block";
-    }
-    else{
-        suggestionBox.style.display = "none";
-    }
+if (availableBeds < data.beds_required) {
+
+    suggestionBox.style.display = "block";
+    suggestionText.innerText =
+        "⚠ Bed shortage expected. Suggested hospital: IGIMS.";
+
+} 
+else if (riskData.level === "High") {
+
+    suggestionBox.style.display = "block";
+    suggestionText.innerText =
+        "Redirect patients to alternative hospital within district.";
+
+} 
+else {
+
+    suggestionBox.style.display = "none";
+
+}
 
     // Chart
     let forecast = generateDummyForecast(predictedLoad);
