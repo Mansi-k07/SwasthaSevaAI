@@ -149,6 +149,9 @@ async function predict(){
 
     let parsed = JSON.parse(storedData);
 
+    let availableBeds = parsed.total_beds - parsed.occupied_beds;
+    document.getElementById("availableBeds").innerText = availableBeds;
+
     let payload = {
         district: district,
         current_patients: parsed.current_patients,
