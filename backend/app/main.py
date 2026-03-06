@@ -1,10 +1,19 @@
 
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.schemas import PredictionRequest
 from app.services.prediction import predict_hospital_status
 
 app = FastAPI(title = "SwasthaSevaAI")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 @app.get("/")
 def home():
