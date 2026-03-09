@@ -14,12 +14,12 @@ const hospitalData = {
 ],
 "Gaya": [
 "Anugrah Narayan Magadh Medical College",
-"Jay Prakash Narayan Hospital"
-"I.D Hospital Gaya"
+"Jay Prakash Narayan Hospital",
+"ID Hospital Gaya"
 ],
 "Muzaffarpur": [
 "SKMCH",
-"Muzaffarpur Sadar Hospital"
+"Muzaffarpur Sadar Hospital",
 "HBCHRC Muzaffarpur"
 ]
 },
@@ -27,18 +27,18 @@ const hospitalData = {
 "Uttar Pradesh": {
 "Lucknow": [
 "KGMU",
-"SGPGIMS"
+"SGPGIMS",
 "Balrampur Hospital Lucknow"
 ],
 "Gorakhpur": [
 "AIIMS Gorakhpur",
-"NSCBD Hospital"
+"NSCBD Hospital",
 "District women hospital Gorakhpur"
 
 ],
 "Varanasi": [
 "BHU Hospital",
-"Heritage Hospital"
+"Heritage Hospital",
 "lal bahadur shastri hospital varanasi"
 ]
 },
@@ -46,17 +46,17 @@ const hospitalData = {
 "Jharkhand": {
 "Ranchi": [
 "RIMS",
-"CIP"
+"CIP",
 "RINPAS"
 ],
 "Dhanbad": [
 "Sadar Hospital Dhanbad",
-"Central Hospital"
+"Central Hospital",
 "Division Hospital Dhanbad"
 ],
 "Jamshedpur": [
 "Tata Main Hospital",
-"MGM Medical College"
+"MGM Medical College",
 "Jamshedpur Sadar Hospital"
 ]
 }
@@ -235,5 +235,39 @@ catch(error){
 alert("Backend connection failed");
 
 }
+
+}
+
+// ------------------------
+// ADMIN PANEL
+// ------------------------
+
+function toggleAdmin(){
+
+let panel = document.getElementById("adminPanel");
+
+if(panel.style.display === "none"){
+panel.style.display = "block";
+}
+else{
+panel.style.display = "none";
+}
+
+}
+
+function saveAdminData(){
+
+let data = {
+
+current_patients: parseInt(document.getElementById("currentPatients").value),
+total_beds: parseInt(document.getElementById("totalBeds").value),
+occupied_beds: parseInt(document.getElementById("occupiedBeds").value),
+doctors_on_duty: parseInt(document.getElementById("doctorsOnDuty").value)
+
+};
+
+localStorage.setItem("hospitalLiveData", JSON.stringify(data));
+
+alert("Hospital data saved successfully");
 
 }
