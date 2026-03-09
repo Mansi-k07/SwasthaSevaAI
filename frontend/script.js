@@ -11,6 +11,16 @@ const hospitalData = {
 "Patna Medical College and Hospital (PMCH)",
 "Indira Gandhi Institute of Medical Sciences (IGIMS)",
 "AIIMS Patna"
+],
+"Gaya": [
+"Anugrah Narayan Magadh Medical College",
+"Jay Prakash Narayan Hospital"
+"I.D Hospital Gaya"
+],
+"Muzaffarpur": [
+"SKMCH",
+"Muzaffarpur Sadar Hospital"
+"HBCHRC Muzaffarpur"
 ]
 },
 
@@ -18,6 +28,18 @@ const hospitalData = {
 "Lucknow": [
 "KGMU",
 "SGPGIMS"
+"Balrampur Hospital Lucknow"
+],
+"Gorakhpur": [
+"AIIMS Gorakhpur",
+"NSCBD Hospital"
+"District women hospital Gorakhpur"
+
+],
+"Varanasi": [
+"BHU Hospital",
+"Heritage Hospital"
+"lal bahadur shastri hospital varanasi"
 ]
 },
 
@@ -25,6 +47,17 @@ const hospitalData = {
 "Ranchi": [
 "RIMS",
 "CIP"
+"RINPAS"
+],
+"Dhanbad": [
+"Sadar Hospital Dhanbad",
+"Central Hospital"
+"Division Hospital Dhanbad"
+],
+"Jamshedpur": [
+"Tata Main Hospital",
+"MGM Medical College"
+"Jamshedpur Sadar Hospital"
 ]
 }
 
