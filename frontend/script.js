@@ -124,13 +124,17 @@ return forecast;
 
 async function predict(){
 
+
+let state = document.getElementById("state").value;
 let district = document.getElementById("district").value;
 let hospital = document.getElementById("hospital").value;
 
 let monsoon = document.getElementById("monsoon").checked;
 let outbreak = document.getElementById("outbreak").checked;
 
-let storedData = localStorage.getItem("hospitalLiveData");
+let hospitalKey = state + "_" + district + "_" + hospital;
+
+let storedData = localStorage.getItem(hospitalKey);
 
 if(!storedData){
 alert("Admin data not found. Please enter hospital data first.");
@@ -266,7 +270,13 @@ doctors_on_duty: parseInt(document.getElementById("doctorsOnDuty").value)
 
 };
 
-localStorage.setItem("hospitalLiveData", JSON.stringify(data));
+let state = document.getElementById("state").value;
+let district = document.getElementById("district").value;
+let hospital = document.getElementById("hospital").value;
+
+let hospitalKey = state + "_" + district + "_" + hospital;
+
+localStorage.setItem(hospitalKey, JSON.stringify(data));
 
 alert("Hospital data saved successfully");
 
