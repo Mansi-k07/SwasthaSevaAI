@@ -123,22 +123,24 @@ Viral Outbreak
 
 <!-- ADMIN LOGIN -->
 
-<div id="adminLogin" class="modal">
+<div id="adminLoginModal" class="modal">
 
 <div class="modal-content">
 
 <h3>Hospital Admin Login</h3>
 
-<input id="adminUser" placeholder="Username">
+<select id="adminHospital">
+<option value="">Select Hospital</option>
+</select>
 
-<input id="adminPass" type="password" placeholder="Password">
+<input type="password" id="adminPassword" placeholder="Enter password">
 
-<button onclick="adminLogin()">Login</button>
+<br><br>
 
+<button onclick="loginAdmin()">Login</button>
 <button onclick="closeAdminLogin()">Close</button>
 
 </div>
-
 </div>
 
 

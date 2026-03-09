@@ -1,10 +1,9 @@
-let chart
+let chart;
 
 
-
-// --------------------
+// =========================
 // HOSPITAL NETWORK
-// --------------------
+// =========================
 
 const hospitalData = {
 
@@ -30,7 +29,6 @@ const hospitalData = {
 
 },
 
-
 "Uttar Pradesh":{
 
 "Lucknow":[
@@ -52,7 +50,6 @@ const hospitalData = {
 
 },
 
-
 "Jharkhand":{
 
 "Ranchi":[
@@ -69,7 +66,7 @@ const hospitalData = {
 
 "Jamshedpur":[
 "MGM Medical College",
-"Sadar Hospital",
+"Sadar Hospital Jamshedpur",
 "Tata Main Hospital"
 ]
 
@@ -78,216 +75,45 @@ const hospitalData = {
 }
 
 
+// =========================
+// ADMIN LOGIN HOSPITAL LIST
+// =========================
 
-// --------------------
-// ADMIN ACCOUNTS
-// --------------------
+function loadHospitalLoginList(){
 
-const adminAccounts = {
+let select = document.getElementById("adminHospital")
 
+if(!select) return
 
-// ================= BIHAR =================
+select.innerHTML = '<option value="">Select Hospital</option>'
 
-pmch_admin:{
-password:"pmch123",
-state:"Bihar",
-district:"Patna",
-hospital:"PMCH"
-},
+Object.keys(hospitalData).forEach(state=>{
 
-igims_admin:{
-password:"igims123",
-state:"Bihar",
-district:"Patna",
-hospital:"IGIMS"
-},
+Object.keys(hospitalData[state]).forEach(district=>{
 
-aiims_patna_admin:{
-password:"aiims123",
-state:"Bihar",
-district:"Patna",
-hospital:"AIIMS Patna"
-},
+hospitalData[state][district].forEach(hospital=>{
 
-gaya_anmmch_admin:{
-password:"gaya123",
-state:"Bihar",
-district:"Gaya",
-hospital:"Anugrah Narayan Magadh Medical College"
-},
+let option = document.createElement("option")
+option.value = hospital
+option.text = hospital
 
-jp_gaya_admin:{
-password:"jpgaya123",
-state:"Bihar",
-district:"Gaya",
-hospital:"Jai Prakash Narayan Hospital"
-},
+select.appendChild(option)
 
-id_gaya_admin:{
-password:"idh123",
-state:"Bihar",
-district:"Gaya",
-hospital:"ID Hospital Gaya"
-},
+})
 
-skmch_admin:{
-password:"skmch123",
-state:"Bihar",
-district:"Muzaffarpur",
-hospital:"SKMCH"
-},
+})
 
-sadar_muz_admin:{
-password:"sadar123",
-state:"Bihar",
-district:"Muzaffarpur",
-hospital:"Sadar Hospital Muzaffarpur"
-},
-
-hbch_admin:{
-password:"hbch123",
-state:"Bihar",
-district:"Muzaffarpur",
-hospital:"Homi Bhabha Cancer Hospital"
-},
-
-
-// ================= UTTAR PRADESH =================
-
-kgmu_admin:{
-password:"kgmu123",
-state:"Uttar Pradesh",
-district:"Lucknow",
-hospital:"KGMU"
-},
-
-sgpgims_admin:{
-password:"sgpgims123",
-state:"Uttar Pradesh",
-district:"Lucknow",
-hospital:"SGPGIMS"
-},
-
-balrampur_admin:{
-password:"bal123",
-state:"Uttar Pradesh",
-district:"Lucknow",
-hospital:"Balrampur Hospital"
-},
-
-aiims_gkp_admin:{
-password:"aiimsgkp123",
-state:"Uttar Pradesh",
-district:"Gorakhpur",
-hospital:"AIIMS Gorakhpur"
-},
-
-nscbd_admin:{
-password:"nscbd123",
-state:"Uttar Pradesh",
-district:"Gorakhpur",
-hospital:"NSCBD Hospital"
-},
-
-women_gkp_admin:{
-password:"women123",
-state:"Uttar Pradesh",
-district:"Gorakhpur",
-hospital:"District Women Hospital"
-},
-
-lbs_varanasi_admin:{
-password:"lbs123",
-state:"Uttar Pradesh",
-district:"Varanasi",
-hospital:"Lal Bahadur Shastri Hospital"
-},
-
-pdd_varanasi_admin:{
-password:"pdd123",
-state:"Uttar Pradesh",
-district:"Varanasi",
-hospital:"Pandit Deen Dayal Hospital"
-},
-
-
-// ================= JHARKHAND =================
-
-rims_admin:{
-password:"rims123",
-state:"Jharkhand",
-district:"Ranchi",
-hospital:"RIMS"
-},
-
-cip_admin:{
-password:"cip123",
-state:"Jharkhand",
-district:"Ranchi",
-hospital:"CIP"
-},
-
-rinpas_admin:{
-password:"rinpas123",
-state:"Jharkhand",
-district:"Ranchi",
-hospital:"RINPAS"
-},
-
-central_dhanbad_admin:{
-password:"central123",
-state:"Jharkhand",
-district:"Dhanbad",
-hospital:"Central Hospital Dhanbad"
-},
-
-sadar_dhanbad_admin:{
-password:"sadar123",
-state:"Jharkhand",
-district:"Dhanbad",
-hospital:"Sadar Hospital Dhanbad"
-},
-
-division_dhanbad_admin:{
-password:"division123",
-state:"Jharkhand",
-district:"Dhanbad",
-hospital:"Divisional Hospital Dhanbad"
-},
-
-mgm_jsr_admin:{
-password:"mgm123",
-state:"Jharkhand",
-district:"Jamshedpur",
-hospital:"MGM Medical College"
-},
-
-sadar_jsr_admin:{
-password:"sadarjsr123",
-state:"Jharkhand",
-district:"Jamshedpur",
-hospital:"Sadar Hospital Jamshedpur"
-},
-
-tata_jsr_admin:{
-password:"tata123",
-state:"Jharkhand",
-district:"Jamshedpur",
-hospital:"Tata Main Hospital"
-}
+})
 
 }
 
+window.onload = loadHospitalLoginList
 
 
 
-let loggedHospital=null
-
-
-
-// --------------------
+// =========================
 // DROPDOWN
-// --------------------
+// =========================
 
 function updateDistricts(){
 
@@ -296,8 +122,12 @@ let districtSelect=document.getElementById("district")
 
 districtSelect.innerHTML="<option>Select District</option>"
 
+if(!hospitalData[state]) return
+
 Object.keys(hospitalData[state]).forEach(d=>{
+
 districtSelect.innerHTML+=`<option value="${d}">${d}</option>`
+
 })
 
 }
@@ -313,61 +143,70 @@ let hospitalSelect=document.getElementById("hospital")
 
 hospitalSelect.innerHTML="<option>Select Hospital</option>"
 
+if(!hospitalData[state] || !hospitalData[state][district]) return
+
 hospitalData[state][district].forEach(h=>{
+
 hospitalSelect.innerHTML+=`<option value="${h}">${h}</option>`
+
 })
 
 }
 
 
 
-// --------------------
+// =========================
 // ADMIN LOGIN
-// --------------------
+// =========================
 
 function openAdminLogin(){
-document.getElementById("adminLogin").style.display="block"
+document.getElementById("adminLoginModal").style.display="block"
 }
 
 function closeAdminLogin(){
-document.getElementById("adminLogin").style.display="none"
+document.getElementById("adminLoginModal").style.display="none"
 }
 
 
 
-function adminLogin(){
+function loginAdmin(){
 
-let user=document.getElementById("adminUser").value
-let pass=document.getElementById("adminPass").value
+let hospital = document.getElementById("adminHospital").value
+let password = document.getElementById("adminPassword").value
 
-if(adminAccounts[user] && adminAccounts[user].password===pass){
+if(!hospital){
+alert("Select hospital first")
+return
+}
 
-loggedHospital=adminAccounts[user]
+let expectedPassword = hospital.toLowerCase().replace(/\s/g,"") + "1234"
 
-document.getElementById("adminLogin").style.display="none"
+if(password === expectedPassword){
+
+alert("Login successful")
 
 document.getElementById("adminPanel").style.display="block"
 
-document.getElementById("adminHospitalTitle").innerText=
-"Hospital: "+loggedHospital.hospital+
-" | District: "+loggedHospital.district+
-" | State: "+loggedHospital.state
+closeAdminLogin()
 
 }
-
 else{
+
 alert("Invalid credentials")
-}
 
 }
 
+}
 
 
-// --------------------
+
+// =========================
 // ADMIN DATA SAVE
-// --------------------
+// =========================
 
 function submitAdminData(){
+
+let hospital=document.getElementById("adminHospital").value
 
 let patients=parseInt(document.getElementById("adminPatients").value)
 
@@ -377,7 +216,7 @@ let occupiedBeds=parseInt(document.getElementById("adminOccupiedBeds").value)
 
 let doctors=parseInt(document.getElementById("adminDoctors").value)
 
-let key=loggedHospital.state+"_"+loggedHospital.district+"_"+loggedHospital.hospital
+let key="hospital_"+hospital
 
 let data={
 
@@ -399,9 +238,9 @@ document.getElementById("adminMessage").innerText=
 
 
 
-// --------------------
+// =========================
 // FORECAST
-// --------------------
+// =========================
 
 function generateForecast(base){
 
@@ -417,20 +256,20 @@ return arr
 
 
 
-// --------------------
+// =========================
 // AI PREDICTION
-// --------------------
+// =========================
 
 async function predict(){
 
-let state=document.getElementById("state").value
-let district=document.getElementById("district").value
 let hospital=document.getElementById("hospital").value
+
+let district=document.getElementById("district").value
 
 let monsoon=document.getElementById("monsoon").checked
 let outbreak=document.getElementById("outbreak").checked
 
-let key=state+"_"+district+"_"+hospital
+let key="hospital_"+hospital
 
 let storedData=localStorage.getItem(key)
 
@@ -464,6 +303,8 @@ viral_outbreak:outbreak
 
 
 
+try{
+
 let response=await fetch("http://127.0.0.1:8000/predict",{
 
 method:"POST",
@@ -474,7 +315,6 @@ body:JSON.stringify(payload)
 
 
 let data=await response.json()
-
 
 document.getElementById("load").innerText=data.predicted_patients
 
@@ -495,7 +335,7 @@ if(availableBeds<data.beds_required){
 suggestionBox.style.display="block"
 
 suggestionText.innerText=
-"Bed shortage expected. Redirect patients to another hospital."
+"⚠ Bed shortage expected. Redirect patients to nearby hospital."
 
 }
 else{
@@ -503,13 +343,11 @@ else{
 suggestionBox.style.display="block"
 
 suggestionText.innerText=
-"Beds available in selected hospital."
+"✅ Beds available in selected hospital."
 
 }
 
 
-
-// chart
 
 let forecast=generateForecast(data.predicted_patients)
 
@@ -538,5 +376,13 @@ fill:false
 }
 
 })
+
+}
+
+catch{
+
+alert("Backend connection failed")
+
+}
 
 }
