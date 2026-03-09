@@ -1,103 +1,64 @@
-let chart;
+let chart
 
 
-// =========================
-// HOSPITAL NETWORK
-// =========================
 
-const hospitalData = {
+// hospital network
+
+const hospitalData={
 
 "Bihar":{
 
-"Patna":[
-"PMCH",
-"IGIMS",
-"AIIMS Patna"
-],
+"Patna":["PMCH","IGIMS","AIIMS Patna"],
 
-"Gaya":[
-"ANMMCH",
-"JPN Hospital",
-"ID Hospital"
-],
+"Gaya":["ANMMCH","JPN Hospital","ID Hospital"],
 
-"Muzaffarpur":[
-"SKMCH",
-"Sadar Hospital Muzaffarpur",
-"Homi Bhabha Cancer Hospital"
-]
+"Muzaffarpur":["SKMCH","Sadar Hospital Muzaffarpur","Homi Bhabha Cancer Hospital"]
 
 },
+
 
 "Uttar Pradesh":{
 
-"Lucknow":[
-"KGMU",
-"SGPGIMS",
-"Balrampur Hospital"
-],
+"Lucknow":["KGMU","SGPGIMS","Balrampur Hospital"],
 
-"Gorakhpur":[
-"AIIMS Gorakhpur",
-"NSCBD Hospital",
-"District Women Hospital"
-],
+"Gorakhpur":["AIIMS Gorakhpur","NSCBD Hospital","District Women Hospital"],
 
-"Varanasi":[
-"Lal Bahadur Shastri Hospital",
-"Pandit Deen Dayal Hospital"
-]
+"Varanasi":["Lal Bahadur Shastri Hospital","Pandit Deen Dayal Hospital"]
 
 },
 
+
 "Jharkhand":{
 
-"Ranchi":[
-"RIMS",
-"CIP",
-"RINPAS"
-],
+"Ranchi":["RIMS","CIP","RINPAS"],
 
-"Dhanbad":[
-"Central Hospital",
-"Sadar Hospital",
-"Divisional Hospital"
-],
+"Dhanbad":["Central Hospital","Sadar Hospital","Divisional Hospital"],
 
-"Jamshedpur":[
-"MGM Medical College",
-"Sadar Hospital Jamshedpur",
-"Tata Main Hospital"
-]
+"Jamshedpur":["MGM Medical College","Sadar Hospital Jamshedpur","Tata Main Hospital"]
 
 }
 
 }
 
 
-// =========================
-// ADMIN LOGIN HOSPITAL LIST
-// =========================
 
-function loadHospitalLoginList(){
+// load hospital list for admin login
 
-let select = document.getElementById("adminHospital")
+window.onload=function(){
+
+let select=document.getElementById("adminHospital")
 
 if(!select) return
 
-select.innerHTML = '<option value="">Select Hospital</option>'
+select.innerHTML="<option>Select Hospital</option>"
 
 Object.keys(hospitalData).forEach(state=>{
 
 Object.keys(hospitalData[state]).forEach(district=>{
 
-hospitalData[state][district].forEach(hospital=>{
+hospitalData[state][district].forEach(h=>{
 
-let option = document.createElement("option")
-option.value = hospital
-option.text = hospital
-
-select.appendChild(option)
+select.innerHTML+=`<option value="${h}">${h}</option>`
 
 })
 
@@ -107,26 +68,21 @@ select.appendChild(option)
 
 }
 
-window.onload = loadHospitalLoginList
 
 
-
-// =========================
-// DROPDOWN
-// =========================
+// dropdown logic
 
 function updateDistricts(){
 
 let state=document.getElementById("state").value
-let districtSelect=document.getElementById("district")
 
-districtSelect.innerHTML="<option>Select District</option>"
+let district=document.getElementById("district")
 
-if(!hospitalData[state]) return
+district.innerHTML="<option>Select District</option>"
 
 Object.keys(hospitalData[state]).forEach(d=>{
 
-districtSelect.innerHTML+=`<option value="${d}">${d}</option>`
+district.innerHTML+=`<option value="${d}">${d}</option>`
 
 })
 
@@ -137,17 +93,16 @@ districtSelect.innerHTML+=`<option value="${d}">${d}</option>`
 function updateHospitals(){
 
 let state=document.getElementById("state").value
+
 let district=document.getElementById("district").value
 
-let hospitalSelect=document.getElementById("hospital")
+let hospital=document.getElementById("hospital")
 
-hospitalSelect.innerHTML="<option>Select Hospital</option>"
-
-if(!hospitalData[state] || !hospitalData[state][district]) return
+hospital.innerHTML="<option>Select Hospital</option>"
 
 hospitalData[state][district].forEach(h=>{
 
-hospitalSelect.innerHTML+=`<option value="${h}">${h}</option>`
+hospital.innerHTML+=`<option value="${h}">${h}</option>`
 
 })
 
@@ -155,44 +110,41 @@ hospitalSelect.innerHTML+=`<option value="${h}">${h}</option>`
 
 
 
-// =========================
-// ADMIN LOGIN
-// =========================
+// admin login
 
 function openAdminLogin(){
+
 document.getElementById("adminLoginModal").style.display="block"
+
 }
 
 function closeAdminLogin(){
+
 document.getElementById("adminLoginModal").style.display="none"
+
 }
 
 
 
 function loginAdmin(){
 
-let hospital = document.getElementById("adminHospital").value
-let password = document.getElementById("adminPassword").value
+let hospital=document.getElementById("adminHospital").value
 
-if(!hospital){
-alert("Select hospital first")
-return
-}
+let pass=document.getElementById("adminPassword").value
 
-let expectedPassword = hospital.toLowerCase().replace(/\s/g,"") + "1234"
+let expected=hospital.toLowerCase().replace(/\s/g,"")+"1234"
 
-if(password === expectedPassword){
+if(pass===expected){
 
-alert("Login successful")
+localStorage.setItem("loggedHospital",hospital)
 
-document.getElementById("adminPanel").style.display="block"
-
-closeAdminLogin()
+window.location.href="admin.html"
 
 }
+
 else{
 
-alert("Invalid credentials")
+alert("Invalid password")
 
 }
 
@@ -200,13 +152,21 @@ alert("Invalid credentials")
 
 
 
-// =========================
-// ADMIN DATA SAVE
-// =========================
+// admin page logic
+
+if(document.getElementById("hospitalName")){
+
+let hospital=localStorage.getItem("loggedHospital")
+
+document.getElementById("hospitalName").innerText="Hospital: "+hospital
+
+}
+
+
 
 function submitAdminData(){
 
-let hospital=document.getElementById("adminHospital").value
+let hospital=localStorage.getItem("loggedHospital")
 
 let patients=parseInt(document.getElementById("adminPatients").value)
 
@@ -216,38 +176,38 @@ let occupiedBeds=parseInt(document.getElementById("adminOccupiedBeds").value)
 
 let doctors=parseInt(document.getElementById("adminDoctors").value)
 
-let key="hospital_"+hospital
 
 let data={
 
 current_patients:patients,
+
 total_beds:totalBeds,
+
 occupied_beds:occupiedBeds,
+
 doctors_on_duty:doctors
 
 }
 
-localStorage.setItem(key,JSON.stringify(data))
 
-let available=totalBeds-occupiedBeds
+localStorage.setItem("hospital_"+hospital,JSON.stringify(data))
 
-document.getElementById("adminMessage").innerText=
-"Available Beds: "+available
+document.getElementById("adminMessage").innerText="Data saved successfully"
 
 }
 
 
 
-// =========================
-// FORECAST
-// =========================
+// forecast
 
 function generateForecast(base){
 
 let arr=[]
 
 for(let i=0;i<7;i++){
+
 arr.push(base+Math.floor(Math.random()*20-10))
+
 }
 
 return arr
@@ -256,9 +216,7 @@ return arr
 
 
 
-// =========================
-// AI PREDICTION
-// =========================
+// prediction
 
 async function predict(){
 
@@ -267,48 +225,53 @@ let hospital=document.getElementById("hospital").value
 let district=document.getElementById("district").value
 
 let monsoon=document.getElementById("monsoon").checked
+
 let outbreak=document.getElementById("outbreak").checked
 
-let key="hospital_"+hospital
 
-let storedData=localStorage.getItem(key)
+let stored=localStorage.getItem("hospital_"+hospital)
 
-if(!storedData){
+if(!stored){
 
-alert("Hospital data not entered by admin yet")
+alert("Admin data not entered yet")
 
 return
 
 }
 
-let parsed=JSON.parse(storedData)
+
+let parsed=JSON.parse(stored)
 
 let availableBeds=parsed.total_beds-parsed.occupied_beds
 
 document.getElementById("availableBeds").innerText=availableBeds
 
 
-
 let payload={
 
 district:district,
+
 current_patients:parsed.current_patients,
+
 occupied_beds:parsed.occupied_beds,
+
 total_beds:parsed.total_beds,
+
 doctors_on_duty:parsed.doctors_on_duty,
+
 monsoon:monsoon,
+
 viral_outbreak:outbreak
 
 }
 
 
-
-try{
-
 let response=await fetch("http://127.0.0.1:8000/predict",{
 
 method:"POST",
+
 headers:{"Content-Type":"application/json"},
+
 body:JSON.stringify(payload)
 
 })
@@ -316,37 +279,14 @@ body:JSON.stringify(payload)
 
 let data=await response.json()
 
+
 document.getElementById("load").innerText=data.predicted_patients
 
 document.getElementById("beds").innerText=data.beds_required
 
 document.getElementById("risk").innerText=data.risk_level
 
-document.getElementById("doctors").innerText=
-Math.ceil(data.predicted_patients/15)
-
-
-
-let suggestionBox=document.getElementById("suggestionBox")
-let suggestionText=document.getElementById("suggestionText")
-
-if(availableBeds<data.beds_required){
-
-suggestionBox.style.display="block"
-
-suggestionText.innerText=
-"⚠ Bed shortage expected. Redirect patients to nearby hospital."
-
-}
-else{
-
-suggestionBox.style.display="block"
-
-suggestionText.innerText=
-"✅ Beds available in selected hospital."
-
-}
-
+document.getElementById("doctors").innerText=data.doctors_required
 
 
 let forecast=generateForecast(data.predicted_patients)
@@ -376,13 +316,5 @@ fill:false
 }
 
 })
-
-}
-
-catch{
-
-alert("Backend connection failed")
-
-}
 
 }
