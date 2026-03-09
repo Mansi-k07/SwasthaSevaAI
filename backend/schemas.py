@@ -1,6 +1,7 @@
 
 
 from pydantic import BaseModel
+   
 
 class PredictionRequest(BaseModel):
     district: str
@@ -8,5 +9,5 @@ class PredictionRequest(BaseModel):
     occupied_beds: int
     total_beds: int
     doctors_on_duty: int
-    monsoon: bool
-    viral_outbreak: bool
+    monsoon: bool = False
+    viral_outbreak: bool = False

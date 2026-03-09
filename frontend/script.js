@@ -263,8 +263,15 @@ return arr
 async function predict(){
 
 let hospital=document.getElementById("hospital").value
-
 let district=document.getElementById("district").value
+
+if(!hospital){
+
+alert("Please select hospital")
+
+return
+
+}
 
 let monsoon=document.getElementById("monsoon").checked
 let outbreak=document.getElementById("outbreak").checked
@@ -313,6 +320,9 @@ body:JSON.stringify(payload)
 
 })
 
+if(!response.ok){
+throw new Error("Server error")
+}
 
 let data=await response.json()
 
@@ -323,7 +333,7 @@ document.getElementById("beds").innerText=data.beds_required
 document.getElementById("risk").innerText=data.risk_level
 
 document.getElementById("doctors").innerText=
-Math.ceil(data.predicted_patients/15)
+data.doctors_required
 
 
 
@@ -335,7 +345,7 @@ if(availableBeds<data.beds_required){
 suggestionBox.style.display="block"
 
 suggestionText.innerText=
-"⚠ Bed shortage expected. Redirect patients to nearby hospital."
+"⚠ Bed shortage expected. Consider redirecting patients to nearby hospital."
 
 }
 else{
