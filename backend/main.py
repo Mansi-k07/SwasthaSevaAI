@@ -2,10 +2,14 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.schemas import PredictionRequest
-from app.services.prediction import predict_hospital_status
+from SwasthaSevaAI.backend.schemas import PredictionRequest
+from SwasthaSevaAI.backend.prediction import predict_hospital_status
 
-app = FastAPI(title = "SwasthaSevaAI")
+app = FastAPI(
+    title="SwasthaSevaAI",
+    description="AI Powered Hospital Emergency Monitoring System",
+    version="1.0"
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -17,7 +21,7 @@ app.add_middleware(
 
 @app.get("/")
 def home():
-    return "SwasthaSevaAI Backend Running"
+    return {"message": "SwasthaSevaAI Backend Running"}
 
 @app.post("/predict")
 def predict(data: PredictionRequest):
@@ -31,7 +35,5 @@ def predict(data: PredictionRequest):
         viral_outbreak = data.viral_outbreak
     )
 
-    return {
-        "district": data.district,
-        **result
-    }
+    return result 
+    
