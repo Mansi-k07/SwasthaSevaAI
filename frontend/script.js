@@ -83,21 +83,201 @@ const hospitalData = {
 // ADMIN ACCOUNTS
 // --------------------
 
-const adminAccounts={
+const adminAccounts = {
 
-pmch_admin:{password:"pmch123",state:"Bihar",district:"Patna",hospital:"PMCH"},
-igims_admin:{password:"igims123",state:"Bihar",district:"Patna",hospital:"IGIMS"},
-aiims_admin:{password:"aiims123",state:"Bihar",district:"Patna",hospital:"AIIMS Patna"},
 
-kgmu_admin:{password:"kgmu123",state:"Uttar Pradesh",district:"Lucknow",hospital:"KGMU"},
-sgpgims_admin:{password:"sgpgims123",state:"Uttar Pradesh",district:"Lucknow",hospital:"SGPGIMS"},
-balrampur_admin:{password:"bal123",state:"Uttar Pradesh",district:"Lucknow",hospital:"Balrampur Hospital"},
+// ================= BIHAR =================
 
-rims_admin:{password:"rims123",state:"Jharkhand",district:"Ranchi",hospital:"RIMS"},
-cip_admin:{password:"cip123",state:"Jharkhand",district:"Ranchi",hospital:"CIP"},
-rinpas_admin:{password:"rinpas123",state:"Jharkhand",district:"Ranchi",hospital:"RINPAS"}
+pmch_admin:{
+password:"pmch123",
+state:"Bihar",
+district:"Patna",
+hospital:"PMCH"
+},
+
+igims_admin:{
+password:"igims123",
+state:"Bihar",
+district:"Patna",
+hospital:"IGIMS"
+},
+
+aiims_patna_admin:{
+password:"aiims123",
+state:"Bihar",
+district:"Patna",
+hospital:"AIIMS Patna"
+},
+
+gaya_anmmch_admin:{
+password:"gaya123",
+state:"Bihar",
+district:"Gaya",
+hospital:"Anugrah Narayan Magadh Medical College"
+},
+
+jp_gaya_admin:{
+password:"jpgaya123",
+state:"Bihar",
+district:"Gaya",
+hospital:"Jai Prakash Narayan Hospital"
+},
+
+id_gaya_admin:{
+password:"idh123",
+state:"Bihar",
+district:"Gaya",
+hospital:"ID Hospital Gaya"
+},
+
+skmch_admin:{
+password:"skmch123",
+state:"Bihar",
+district:"Muzaffarpur",
+hospital:"SKMCH"
+},
+
+sadar_muz_admin:{
+password:"sadar123",
+state:"Bihar",
+district:"Muzaffarpur",
+hospital:"Sadar Hospital Muzaffarpur"
+},
+
+hbch_admin:{
+password:"hbch123",
+state:"Bihar",
+district:"Muzaffarpur",
+hospital:"Homi Bhabha Cancer Hospital"
+},
+
+
+// ================= UTTAR PRADESH =================
+
+kgmu_admin:{
+password:"kgmu123",
+state:"Uttar Pradesh",
+district:"Lucknow",
+hospital:"KGMU"
+},
+
+sgpgims_admin:{
+password:"sgpgims123",
+state:"Uttar Pradesh",
+district:"Lucknow",
+hospital:"SGPGIMS"
+},
+
+balrampur_admin:{
+password:"bal123",
+state:"Uttar Pradesh",
+district:"Lucknow",
+hospital:"Balrampur Hospital"
+},
+
+aiims_gkp_admin:{
+password:"aiimsgkp123",
+state:"Uttar Pradesh",
+district:"Gorakhpur",
+hospital:"AIIMS Gorakhpur"
+},
+
+nscbd_admin:{
+password:"nscbd123",
+state:"Uttar Pradesh",
+district:"Gorakhpur",
+hospital:"NSCBD Hospital"
+},
+
+women_gkp_admin:{
+password:"women123",
+state:"Uttar Pradesh",
+district:"Gorakhpur",
+hospital:"District Women Hospital"
+},
+
+lbs_varanasi_admin:{
+password:"lbs123",
+state:"Uttar Pradesh",
+district:"Varanasi",
+hospital:"Lal Bahadur Shastri Hospital"
+},
+
+pdd_varanasi_admin:{
+password:"pdd123",
+state:"Uttar Pradesh",
+district:"Varanasi",
+hospital:"Pandit Deen Dayal Hospital"
+},
+
+
+// ================= JHARKHAND =================
+
+rims_admin:{
+password:"rims123",
+state:"Jharkhand",
+district:"Ranchi",
+hospital:"RIMS"
+},
+
+cip_admin:{
+password:"cip123",
+state:"Jharkhand",
+district:"Ranchi",
+hospital:"CIP"
+},
+
+rinpas_admin:{
+password:"rinpas123",
+state:"Jharkhand",
+district:"Ranchi",
+hospital:"RINPAS"
+},
+
+central_dhanbad_admin:{
+password:"central123",
+state:"Jharkhand",
+district:"Dhanbad",
+hospital:"Central Hospital Dhanbad"
+},
+
+sadar_dhanbad_admin:{
+password:"sadar123",
+state:"Jharkhand",
+district:"Dhanbad",
+hospital:"Sadar Hospital Dhanbad"
+},
+
+division_dhanbad_admin:{
+password:"division123",
+state:"Jharkhand",
+district:"Dhanbad",
+hospital:"Divisional Hospital Dhanbad"
+},
+
+mgm_jsr_admin:{
+password:"mgm123",
+state:"Jharkhand",
+district:"Jamshedpur",
+hospital:"MGM Medical College"
+},
+
+sadar_jsr_admin:{
+password:"sadarjsr123",
+state:"Jharkhand",
+district:"Jamshedpur",
+hospital:"Sadar Hospital Jamshedpur"
+},
+
+tata_jsr_admin:{
+password:"tata123",
+state:"Jharkhand",
+district:"Jamshedpur",
+hospital:"Tata Main Hospital"
+}
 
 }
+
 
 
 
