@@ -3,8 +3,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from schemas import PredictionRequest
-from prediction import predict_hospital_status
+from backend.schemas import PredictionRequest
+from backend.prediction import predict_hospital_status
 
 app = FastAPI(
     title="SwasthaSevaAI",
