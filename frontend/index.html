@@ -9,55 +9,42 @@
 
 </head>
 
-<body>
 
 <body>
-
-<div class="header">
-
-SwasthaSevaAI – Emergency Hospital Monitoring System
-
-</div>
-
 
 <header>
 
 <div class="header">
     <h1>SwasthaSevaAI</h1>
+    <p class="subtitle">AI Powered Emergency Hospital Monitoring System</p>
     <button class="admin-btn">Hospital Admin Login</button>
 </div>
-
+  
 </header>
 
 
-<select id="state" onchange="updateDistricts()">
+<div class="controls">
 
+<select id="state" onchange="updateDistricts()">
 <option value="">Select State</option>
 
 <option value="Bihar">Bihar</option>
 <option value="Uttar Pradesh">Uttar Pradesh</option>
 <option value="Jharkhand">Jharkhand</option>
-
 </select>
-
-
 
 <select id="district" onchange="updateHospitals()">
-
 <option value="">Select District</option>
-
 </select>
-
-
 
 <select id="hospital">
-
 <option value="">Select Hospital</option>
-
 </select>
 
+</div>
 
 
+<div class="options">
 <label>
 <input type="checkbox" id="monsoon"> Monsoon
 </label>
@@ -65,12 +52,10 @@ SwasthaSevaAI – Emergency Hospital Monitoring System
 <label>
 <input type="checkbox" id="outbreak"> Viral Outbreak
 </label>
-
-
-<button onclick="predict()">Run AI Prediction</button>
-
 </div>
 
+
+<button class="predict-btn">Run AI Prediction</button>
 
 
 
@@ -109,15 +94,12 @@ SwasthaSevaAI – Emergency Hospital Monitoring System
 </div>
 
 
-<canvas id="forecastChart"></canvas>
 
+<canvas id="forecastChart"></canvas>
 
 <div id="suggestionBox">
 
 <p id="suggestionText"></p>
-
-</div>
-
 
 </div>
 
@@ -142,7 +124,6 @@ SwasthaSevaAI – Emergency Hospital Monitoring System
 </div>
 
 </div>
-
 
 
 <script src="script.js"></script>
