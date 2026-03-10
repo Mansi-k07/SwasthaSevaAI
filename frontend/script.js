@@ -229,9 +229,9 @@ let monsoon=document.getElementById("monsoon").checked
 let outbreak=document.getElementById("outbreak").checked
 
 
-let stored=localStorage.getItem("hospital_"+hospital, JSON.stringify(adminData));
+let stored=localStorage.getItem("hospital_"+hospital);
 
-if (!adminData) {
+if (!stored) {
     alert("Admin data not entered yet");
     return;
 }
