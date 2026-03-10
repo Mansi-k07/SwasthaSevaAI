@@ -232,12 +232,8 @@ let outbreak=document.getElementById("outbreak").checked
 let stored=localStorage.getItem("hospital_"+hospital)
 
 if (!adminData) {
-   adminData = {
-        current_patients: 120,
-        total_beds: 200,
-        occupied_beds: 150,
-        doctors_on_duty: 15
-    };
+    alert("Admin data not entered yet");
+    return;
 }
 
 let parsed=JSON.parse(stored)
