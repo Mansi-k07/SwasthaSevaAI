@@ -280,14 +280,15 @@ body:JSON.stringify(payload)
 let data=await response.json()
 
 
-document.getElementById("load").innerText=data.predicted_patients
+document.getElementById("predictedPatients").innerText=data.predicted_patients
 
-document.getElementById("beds").innerText=data.beds_required
+document.getElementById("bedsNeeded").innerText=data.beds_required
 
-document.getElementById("risk").innerText=data.risk_level
+document.getElementById("riskLevel").innerText=data.risk_level
 
-document.getElementById("doctors").innerText=data.doctors_required
+document.getElementById("doctorsNeeded").innerText=data.doctors_required
 
+document.getElementById("availableBeds").innerText=data.available_beds
 
 let forecast=generateForecast(data.predicted_patients)
 
