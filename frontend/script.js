@@ -231,21 +231,20 @@ let outbreak=document.getElementById("outbreak").checked
 
 let stored=localStorage.getItem("hospital_"+hospital)
 
-if(!stored){
-
-alert("Admin data not entered yet")
-
-return
-
+if (!adminData) {
+   adminData = {
+        current_patients: 120,
+        total_beds: 200,
+        occupied_beds: 150,
+        doctors_on_duty: 15
+    };
 }
-
 
 let parsed=JSON.parse(stored)
 
 let availableBeds=parsed.total_beds-parsed.occupied_beds
 
 document.getElementById("availableBeds").innerText=availableBeds
-
 
 let payload={
 
@@ -288,7 +287,6 @@ document.getElementById("riskLevel").innerText=data.risk_level
 
 document.getElementById("doctorsNeeded").innerText=data.doctors_required
 
-document.getElementById("availableBeds").innerText=data.available_beds
 
 let forecast=generateForecast(data.predicted_patients)
 
