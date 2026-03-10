@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <title>SwasthaSevaAI</title>
 
 <link rel="stylesheet" href="style.css">
@@ -12,70 +11,62 @@
 
 <body>
 
-<div class="topbar">
+<header>
 
-<h2>SwasthaSevaAI</h2>
+<h1>SwasthaSevaAI</h1>
 
 <button onclick="openAdminLogin()">Hospital Admin Login</button>
 
-</div>
-
+</header>
 
 
 <div class="container">
 
-<h1>Emergency Hospital Monitoring Dashboard</h1>
+<h2>Emergency Hospital Monitoring Dashboard</h2>
 
-<p class="subtitle">
-AI Based Patient Load Prediction & Hospital Resource Planning
-</p>
-
-
-
-<div class="controls">
 
 <select id="state" onchange="updateDistricts()">
+
 <option value="">Select State</option>
+
 <option value="Bihar">Bihar</option>
 <option value="Uttar Pradesh">Uttar Pradesh</option>
 <option value="Jharkhand">Jharkhand</option>
+
 </select>
 
 
 
 <select id="district" onchange="updateHospitals()">
+
 <option value="">Select District</option>
+
 </select>
 
 
 
 <select id="hospital">
+
 <option value="">Select Hospital</option>
+
 </select>
 
 
 
 <label>
-<input type="checkbox" id="monsoon">
-Monsoon
+<input type="checkbox" id="monsoon"> Monsoon
 </label>
 
-
-
 <label>
-<input type="checkbox" id="outbreak">
-Viral Outbreak
+<input type="checkbox" id="outbreak"> Viral Outbreak
 </label>
 
 
 
 <button onclick="predict()">Run AI Prediction</button>
 
-</div>
 
-
-
-<div class="card-container">
+<div class="cards">
 
 <div class="card">
 <h3>Predicted Patients</h3>
@@ -108,9 +99,7 @@ Viral Outbreak
 <canvas id="forecastChart"></canvas>
 
 
-<div id="suggestionBox" class="suggestion" style="display:none">
-
-<h3>Hospital Suggestion</h3>
+<div id="suggestionBox">
 
 <p id="suggestionText"></p>
 
@@ -121,56 +110,26 @@ Viral Outbreak
 
 
 
-<!-- ADMIN LOGIN -->
-
 <div id="adminLoginModal" class="modal">
 
 <div class="modal-content">
 
 <h3>Hospital Admin Login</h3>
 
-<select id="adminHospital">
-<option value="">Select Hospital</option>
-</select>
+<select id="adminHospital"></select>
 
 <input type="password" id="adminPassword" placeholder="Enter password">
 
-<br><br>
+<br>
 
 <button onclick="loginAdmin()">Login</button>
+
 <button onclick="closeAdminLogin()">Close</button>
 
 </div>
-</div>
-
-
-
-<!-- ADMIN PANEL -->
-
-<div id="adminPanel" class="adminPanel" style="display:none">
-
-<h2>Hospital Admin Panel</h2>
-
-<p id="adminHospitalTitle"></p>
-
-
-<label>Current Patients</label>
-<input id="adminPatients" type="number">
-
-<label>Total Beds</label>
-<input id="adminTotalBeds" type="number">
-
-<label>Occupied Beds</label>
-<input id="adminOccupiedBeds" type="number">
-
-<label>Doctors On Duty</label>
-<input id="adminDoctors" type="number">
-
-<button onclick="submitAdminData()">Submit Hospital Data</button>
-
-<p id="adminMessage"></p>
 
 </div>
+
 
 
 <script src="script.js"></script>

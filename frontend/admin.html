@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Hospital Admin</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<h1>Hospital Admin Dashboard</h1>
+
+<h3 id="hospitalName"></h3>
+
+
+
+<div class="adminForm">
+
+<label>Current Patients</label>
+<input id="adminPatients" type="number">
+
+<label>Total Beds</label>
+<input id="adminTotalBeds" type="number">
+
+<label>Occupied Beds</label>
+<input id="adminOccupiedBeds" type="number">
+
+<label>Doctors On Duty</label>
+<input id="adminDoctors" type="number">
+
+
+<button onclick="submitAdminData()">Save Hospital Data</button>
+
+<p id="adminMessage"></p>
+
+</div>
+
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
