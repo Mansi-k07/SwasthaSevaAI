@@ -266,7 +266,7 @@ viral_outbreak:outbreak
 }
 
 
-let response=await fetch("http://127.0.0.1:8000/predict",{
+let response=await fetch("https://swasthasevaai-backend-f15e.onrender.com/predict",{
 
 method:"POST",
 
