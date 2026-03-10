@@ -279,7 +279,21 @@ document.getElementById("predictedPatients").innerText=data.predicted_patients
 
 document.getElementById("bedsNeeded").innerText=data.beds_required
 
-document.getElementById("riskLevel").innerText=data.risk_level
+let risk = data.risk_level;
+let riskElement = document.getElementById("riskLevel");
+
+riskElement.innerText = risk;
+riskElement.className = "risk";
+
+if(risk === "LOW"){
+riskElement.classList.add("risk-low");
+}
+else if(risk === "MEDIUM"){
+riskElement.classList.add("risk-medium");
+}
+else{
+riskElement.classList.add("risk-high");
+}
 
 document.getElementById("doctorsNeeded").innerText=data.doctors_required
 
