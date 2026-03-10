@@ -229,7 +229,7 @@ let monsoon=document.getElementById("monsoon").checked
 let outbreak=document.getElementById("outbreak").checked
 
 
-let stored=localStorage.getItem("hospital_"+hospital)
+let stored=localStorage.getItem("hospital_"+hospital, JSON.stringify(adminData));
 
 if (!adminData) {
     alert("Admin data not entered yet");
@@ -269,7 +269,7 @@ headers:{"Content-Type":"application/json"},
 
 body:JSON.stringify(payload)
 
-})
+}) 
 
 
 let data=await response.json()
