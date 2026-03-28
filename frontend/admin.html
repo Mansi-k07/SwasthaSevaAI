@@ -1,45 +1,189 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
-<title>Hospital Admin</title>
-
-<link rel="stylesheet" href="style.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SwasthaSevaAI — Hospital Admin Panel</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<h1>Hospital Admin Dashboard</h1>
+<!-- ═══════════════════════════════════════
+     ADMIN HEADER
+     BUG FIXED: original had no back button / logout — admin was stuck on page
+═══════════════════════════════════════ -->
+<header class="admin-header">
+  <div class="header-brand">
+    <div class="header-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round">
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+      </svg>
+    </div>
+    <div>
+      <div class="brand-name">SwasthaSevaAI</div>
+      <div class="brand-tagline">Admin Panel</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <span class="admin-hospital-badge" id="adminBadgeName">Loading...</span>
+    <a href="index.html" class="btn btn-outline" style="font-size:13px;">Public Dashboard</a>
+    <button class="btn btn-danger" style="font-size:13px;" onclick="logoutAdmin()">Logout</button>
+  </div>
+</header>
 
-<h3 id="hospitalName"></h3>
+
+<!-- ═══════════════════════════════════════
+     MAIN CONTENT
+═══════════════════════════════════════ -->
+<main class="page-wrapper">
+
+  <div style="margin-bottom: 6px; font-size: 13px; color: var(--text-muted);">
+    Logged in as: <strong id="adminHospitalName">...</strong>
+  </div>
+  <div style="margin-bottom: 28px; font-size: 13px; color: var(--text-muted);">
+    Submit your hospital's current resource data below. This data is published to the public monitoring dashboard.
+  </div>
 
 
+  <!-- ── DATA ENTRY FORM ── -->
+  <div class="admin-form-card">
+    <h2>Current Hospital Resources</h2>
+    <p class="subtitle">Enter today's actual numbers. This will update the public dashboard and trigger AI prediction.</p>
 
-<div class="adminForm">
+    <div class="form-grid">
 
-<label>Current Patients</label>
-<input id="adminPatients" type="number">
+      <div class="form-group">
+        <label for="inpPatients">Current Patients *</label>
+        <input type="number" id="inpPatients" placeholder="e.g. 150" min="0">
+        <div class="form-note">Total patients currently admitted</div>
+      </div>
 
-<label>Total Beds</label>
-<input id="adminTotalBeds" type="number">
+      <div class="form-group">
+        <label for="inpTotalBeds">Total Beds *</label>
+        <input type="number" id="inpTotalBeds" placeholder="e.g. 300" min="1">
+        <div class="form-note">Total bed capacity of hospital</div>
+      </div>
 
-<label>Occupied Beds</label>
-<input id="adminOccupiedBeds" type="number">
+      <div class="form-group">
+        <label for="inpOccupied">Occupied Beds *</label>
+        <input type="number" id="inpOccupied" placeholder="e.g. 220" min="0">
+        <div class="form-note">Beds currently in use</div>
+      </div>
 
-<label>Doctors On Duty</label>
-<input id="adminDoctors" type="number">
+      <div class="form-group">
+        <label for="inpDoctors">Doctors On Duty *</label>
+        <input type="number" id="inpDoctors" placeholder="e.g. 12" min="0">
+        <div class="form-note">Doctors currently available</div>
+      </div>
+
+      <div class="form-group">
+        <label for="inpIcuBeds">ICU Beds (optional)</label>
+        <input type="number" id="inpIcuBeds" placeholder="e.g. 30" min="0">
+        <div class="form-note">Total ICU bed capacity</div>
+      </div>
+
+      <div class="form-group">
+        <label for="inpIcuOccupied">ICU Occupied (optional)</label>
+        <input type="number" id="inpIcuOccupied" placeholder="e.g. 18" min="0">
+        <div class="form-note">ICU beds currently in use</div>
+      </div>
+
+    </div>
+
+    <div class="form-group" style="margin-bottom: 28px; max-width: 280px;">
+      <label for="inpStatus">Emergency Status</label>
+      <select id="inpStatus">
+        <option value="normal">Normal — routine operations</option>
+        <option value="alert">Alert — monitor closely</option>
+        <option value="critical">Critical — emergency protocols active</option>
+      </select>
+    </div>
+
+    <div class="save-bar">
+      <button class="btn btn-primary btn-lg" id="saveBtn" onclick="submitAdminData()">
+        Save &amp; Publish Data
+      </button>
+      <span class="save-message" id="saveMessage"></span>
+    </div>
+
+  </div>
 
 
-<button onclick="submitAdminData()">Save Hospital Data</button>
+  <!-- ── AI PREDICTION PANEL (shown after save) ── -->
+  <div class="admin-prediction-card" id="adminPredPanel" style="display:none;">
+    <h3>AI Prediction Results</h3>
+    <div class="admin-stats-row">
 
-<p id="adminMessage"></p>
+      <div class="admin-stat">
+        <div class="admin-stat-value" id="adminPredPat">—</div>
+        <div class="admin-stat-label">Predicted Patients</div>
+      </div>
 
-</div>
+      <div class="admin-stat">
+        <div class="admin-stat-value" id="adminPredBeds">—</div>
+        <div class="admin-stat-label">Beds Required</div>
+      </div>
 
+      <div class="admin-stat">
+        <div class="admin-stat-value" id="adminPredDoc">—</div>
+        <div class="admin-stat-label">Doctors Needed</div>
+      </div>
+
+      <div class="admin-stat">
+        <div style="margin-bottom: 6px;">
+          <span class="admin-risk-badge" id="adminRiskBadge">—</span>
+        </div>
+        <div class="admin-stat-label">Risk Level</div>
+      </div>
+
+    </div>
+
+    <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+      <p style="font-size: 14px; color: rgba(255,255,255,0.75);" id="adminPredMsg"></p>
+    </div>
+  </div>
+
+
+  <!-- ── AVAILABLE BEDS FROM SUBMITTED DATA ── -->
+  <div class="occupancy-bar-wrap" id="adminOccBar" style="display:none;">
+    <label>Live Bed Occupancy after this update</label>
+    <div class="occ-bar">
+      <div class="occ-fill" id="adminOccFill"></div>
+    </div>
+    <div class="occ-labels">
+      <span>0%</span>
+      <span id="adminOccPct">—</span>
+      <span>100%</span>
+    </div>
+  </div>
+
+</main>
 
 
 <script src="script.js"></script>
+
+<!-- Update the occupancy bar when inputs change -->
+<script>
+  function liveUpdateOccBar() {
+    const total = parseInt(document.getElementById("inpTotalBeds")?.value || 0);
+    const occ   = parseInt(document.getElementById("inpOccupied")?.value || 0);
+    if (total > 0 && occ >= 0) {
+      const pct = Math.min(100, Math.round((occ / total) * 100));
+      const fillEl = document.getElementById("adminOccFill");
+      const pctEl  = document.getElementById("adminOccPct");
+      const barEl  = document.getElementById("adminOccBar");
+      if (fillEl)  { fillEl.style.width = pct + "%"; fillEl.className = "occ-fill" + (pct > 85 ? " high" : pct > 70 ? " medium" : ""); }
+      if (pctEl)   pctEl.textContent = pct + "%";
+      if (barEl)   barEl.style.display = "block";
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    ["inpTotalBeds", "inpOccupied"].forEach(id => {
+      document.getElementById(id)?.addEventListener("input", liveUpdateOccBar);
+    });
+  });
+</script>
 
 </body>
 </html>

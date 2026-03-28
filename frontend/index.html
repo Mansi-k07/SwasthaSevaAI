@@ -1,132 +1,201 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>SwasthaSevaAI</title>
-
-<link rel="stylesheet" href="style.css">
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SwasthaSevaAI — Hospital Monitoring Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
-
 <body>
 
-<header>
-
-<div class="header">
-    <h1>SwasthaSevaAI</h1>
-    <p class="subtitle">AI Powered Emergency Hospital Monitoring System</p>
-    <button class="admin-btn" onclick="openAdminLogin()">Hospital Admin Login</button>
-</div>
-  
+<!-- ═══════════════════════════════════════
+     HEADER
+═══════════════════════════════════════ -->
+<header class="site-header">
+  <div class="header-brand">
+    <div class="header-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round">
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+      </svg>
+    </div>
+    <div>
+      <div class="brand-name">SwasthaSevaAI</div>
+      <div class="brand-tagline">Emergency Hospital Monitoring System</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <div class="live-badge">
+      <span class="live-dot"></span>
+      Live Monitoring
+    </div>
+    <button class="btn btn-outline" onclick="openAdminLogin()">Hospital Admin Login</button>
+  </div>
 </header>
 
 
-<div class="controls">
+<!-- ═══════════════════════════════════════
+     MAIN CONTENT
+═══════════════════════════════════════ -->
+<main class="page-wrapper">
 
-<select id="state" onchange="updateDistricts()">
-<option value="">Select State</option>
+  <!-- Hospital Selector -->
+  <div class="selector-card">
+    <h2>Select Hospital to Monitor</h2>
+    <div class="selector-row">
 
-<option value="Bihar">Bihar</option>
-<option value="Uttar Pradesh">Uttar Pradesh</option>
-<option value="Jharkhand">Jharkhand</option>
-</select>
+      <div class="form-group">
+        <label for="stateSelect">State</label>
+        <select id="stateSelect" onchange="updateDistricts()">
+          <option value="">Select State</option>
+          <option value="Bihar">Bihar</option>
+          <option value="Uttar Pradesh">Uttar Pradesh</option>
+          <option value="Jharkhand">Jharkhand</option>
+          <option value="Gujarat">Gujarat</option>
+          <option value="Maharashtra">Maharashtra</option>
+        </select>
+      </div>
 
-<select id="district" onchange="updateHospitals()">
-<option value="">Select District</option>
-</select>
+      <div class="form-group">
+        <label for="districtSelect">District</label>
+        <select id="districtSelect" onchange="updateHospitals()">
+          <option value="">Select District</option>
+        </select>
+      </div>
 
-<select id="hospital">
-<option value="">Select Hospital</option>
-</select>
+      <div class="form-group">
+        <label for="hospitalSelect">Hospital</label>
+        <select id="hospitalSelect">
+          <option value="">Select Hospital</option>
+        </select>
+      </div>
 
-</div>
+      <div class="form-group">
+        <label>Conditions</label>
+        <div class="toggle-group">
+          <label class="toggle-label">
+            <input type="checkbox" id="monsoonCheck"> Monsoon season
+          </label>
+          <label class="toggle-label">
+            <input type="checkbox" id="outbreakCheck"> Viral outbreak
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>&nbsp;</label>
+        <button class="btn btn-primary btn-lg" id="predictBtn" onclick="runPrediction()">
+          Run AI Prediction
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Alert / Suggestion Box -->
+  <div class="alert-box" id="alertBox"></div>
+
+  <!-- Prediction Result Cards -->
+  <div class="section-label">Prediction Results</div>
+  <div class="results-grid">
+
+    <div class="stat-card">
+      <div class="stat-label">Predicted Patients</div>
+      <div class="stat-value" id="predPatients">—</div>
+    </div>
+
+    <div class="stat-card risk-card">
+      <div class="stat-label">Risk Level</div>
+      <div class="stat-value" id="predRisk">—</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Doctors Needed</div>
+      <div class="stat-value" id="predDoctors">—</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Beds Required</div>
+      <div class="stat-value" id="predBeds">—</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Available Beds</div>
+      <div class="stat-value" id="predAvailBeds">—</div>
+    </div>
+
+  </div>
+
+  <!-- Bed Occupancy Bar -->
+  <div class="occupancy-bar-wrap">
+    <label>Current Bed Occupancy</label>
+    <div class="occ-bar">
+      <div class="occ-fill" id="occFill"></div>
+    </div>
+    <div class="occ-labels">
+      <span>0%</span>
+      <span id="occPercent">—</span>
+      <span>100%</span>
+    </div>
+  </div>
+
+  <!-- 7-Day Forecast Chart -->
+  <div class="chart-card">
+    <h3>7-Day Patient Load Forecast</h3>
+    <canvas id="forecastChart" height="90"></canvas>
+    <p class="hint" id="chartHint">Run a prediction to see the 7-day forecast</p>
+  </div>
+
+</main>
 
 
-<div class="options">
-<label>
-<input type="checkbox" id="monsoon"> Monsoon
-</label>
+<!-- ═══════════════════════════════════════
+     ADMIN LOGIN MODAL
+     BUG FIXED: original modal used position:fixed which caused layout
+     collapse. Now uses a flex backdrop in normal document flow.
+═══════════════════════════════════════ -->
+<div class="modal-backdrop" id="adminModal">
+  <div class="modal-box">
+    <h3>Hospital Admin Login</h3>
+    <p>Select your hospital and enter your password to access the admin panel.</p>
 
-<label>
-<input type="checkbox" id="outbreak"> Viral Outbreak
-</label>
-</div>
+    <div class="form-group">
+      <label for="adminHospitalSelect">Your Hospital</label>
+      <select id="adminHospitalSelect">
+        <option value="">Select your hospital</option>
+      </select>
+    </div>
 
+    <div class="form-group" style="margin-top: 14px;">
+      <label for="adminPasswordInput">Password</label>
+      <input type="password" id="adminPasswordInput" placeholder="Enter password">
+      <div class="form-note">Default format: hospitalname@swastha (e.g. pmchpatna@swastha)</div>
+    </div>
 
-<button class="predict-btn" onclick="predict()">Run AI Prediction</button>
+    <div class="error-msg" id="loginError"></div>
 
-
-
-<div class="main-container">
-
-
-<div class="dashboard">
-
-<div class="card">
-<h3>Predicted Patients</h3>
-<p id="predictedPatients">--</p>
-</div>
-
-<div class="card">
-<h3>Risk Level</h3>
-<p id="riskLevel" class="risk">--</p>
-</div>
-
-<div class="card">
-<h3>Doctors Needed</h3>
-<p id="doctorsNeeded">--</p>
-</div>
-
-<div class="card">
-<h3>Bed Requirement</h3>
-<p id="bedsNeeded">--</p>
-</div>
-
-<div class="card">
-<h3>Available Beds</h3>
-<p id="availableBeds">--</p>
-
-</div>
-
-
-</div>
-
-
-
-<canvas id="forecastChart"></canvas>
-
-<div id="suggestionBox">
-
-<p id="suggestionText"></p>
-
-</div>
-
-
-
-<div id="adminLoginModal" class="modal">
-
-<div class="modal-content">
-
-<h3>Hospital Admin Login</h3>
-
-<select id="adminHospital"></select>
-
-<input type="password" id="adminPassword" placeholder="Enter password">
-
-<br>
-
-<button onclick="loginAdmin()">Login</button>
-
-<button onclick="closeAdminLogin()">Close</button>
-
-</div>
-
+    <div class="modal-actions">
+      <button class="btn btn-navy" onclick="loginAdmin()">Login</button>
+      <button class="btn btn-outline" style="color:var(--text-secondary); border-color:var(--border);" onclick="closeAdminLogin()">Cancel</button>
+    </div>
+  </div>
 </div>
 
 
 <script src="script.js"></script>
+
+<!-- Hide chart hint once a prediction runs -->
+<script>
+  const origRunPrediction = window.runPrediction;
+  if (typeof runPrediction === 'function') {
+    const origFn = runPrediction;
+    window.runPrediction = async function() {
+      await origFn();
+      const hint = document.getElementById("chartHint");
+      if (hint) hint.style.display = "none";
+    };
+  }
+</script>
 
 </body>
 </html>
