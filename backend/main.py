@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # Original: from backend.schemas / from backend.prediction
 # Crashed on Render with ModuleNotFoundError because the working
 # directory is already /backend — no sub-package prefix needed.
-from schemas import PredictionRequest, HospitalUpdate
+from backend.schemas import PredictionRequest, HospitalUpdate
 from prediction import predict_hospital_status
 from storage import (
     update_hospital_data,
