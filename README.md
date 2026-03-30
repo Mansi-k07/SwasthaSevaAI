@@ -1,7 +1,7 @@
 # SwasthaSevaAI 🏥
 
 > **AI-Powered Emergency Hospital Monitoring System for India**
-> Built for India Innovates 2026 Hackathon
+> Built for Hackathon
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Netlify-00C7B7?style=flat-square&logo=netlify)](https://poetic-meerkat-ab4a89.netlify.app)
 [![Backend API](https://img.shields.io/badge/Backend%20API-Render-46E3B7?style=flat-square&logo=render)](https://swasthasevaai-backend-f15e.onrender.com/docs)
@@ -238,7 +238,3 @@ Examples:
 Mentored using SwasthaSevaAI development guidelines
 
 ---
-
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
