@@ -8,10 +8,6 @@
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════
-     ADMIN HEADER
-     BUG FIXED: original had no back button / logout — admin was stuck on page
-═══════════════════════════════════════ -->
 <header class="admin-header">
   <div class="header-brand">
     <div class="header-logo">
@@ -26,71 +22,69 @@
   </div>
   <div class="header-actions">
     <span class="admin-hospital-badge" id="adminBadgeName">Loading...</span>
-    <a href="index.html" class="btn btn-outline" style="font-size:13px;">Public Dashboard</a>
-    <button class="btn btn-danger" style="font-size:13px;" onclick="logoutAdmin()">Logout</button>
+    <a href="index.html" class="btn btn-outline" style="font-size:13px">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      Public Dashboard
+    </a>
+    <button class="btn btn-danger" style="font-size:13px" onclick="logoutAdmin()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Logout
+    </button>
   </div>
 </header>
 
-
-<!-- ═══════════════════════════════════════
-     MAIN CONTENT
-═══════════════════════════════════════ -->
 <main class="page-wrapper">
 
-  <div style="margin-bottom: 6px; font-size: 13px; color: var(--text-muted);">
-    Logged in as: <strong id="adminHospitalName">...</strong>
-  </div>
-  <div style="margin-bottom: 28px; font-size: 13px; color: var(--text-muted);">
-    Submit your hospital's current resource data below. This data is published to the public monitoring dashboard.
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px">
+    <div>
+      <div style="font-size:20px;font-weight:700;color:var(--navy)" id="adminHospitalName">...</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-top:2px">Submit your hospital's current resource data. Published instantly to the public dashboard.</div>
+    </div>
+    <span class="last-updated-tag" id="adminLastUpdated">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Never updated
+    </span>
   </div>
 
-
-  <!-- ── DATA ENTRY FORM ── -->
+  <!-- Data Entry Form -->
   <div class="admin-form-card">
     <h2>Current Hospital Resources</h2>
-    <p class="subtitle">Enter today's actual numbers. This will update the public dashboard and trigger AI prediction.</p>
+    <p class="subtitle">Enter today's actual numbers. Saving will update the public dashboard and run AI prediction.</p>
 
     <div class="form-grid">
-
       <div class="form-group">
         <label for="inpPatients">Current Patients *</label>
         <input type="number" id="inpPatients" placeholder="e.g. 150" min="0">
         <div class="form-note">Total patients currently admitted</div>
       </div>
-
       <div class="form-group">
         <label for="inpTotalBeds">Total Beds *</label>
         <input type="number" id="inpTotalBeds" placeholder="e.g. 300" min="1">
-        <div class="form-note">Total bed capacity of hospital</div>
+        <div class="form-note">Total bed capacity of this hospital</div>
       </div>
-
       <div class="form-group">
         <label for="inpOccupied">Occupied Beds *</label>
         <input type="number" id="inpOccupied" placeholder="e.g. 220" min="0">
         <div class="form-note">Beds currently in use</div>
       </div>
-
       <div class="form-group">
         <label for="inpDoctors">Doctors On Duty *</label>
         <input type="number" id="inpDoctors" placeholder="e.g. 12" min="0">
         <div class="form-note">Doctors currently available</div>
       </div>
-
       <div class="form-group">
-        <label for="inpIcuBeds">ICU Beds (optional)</label>
+        <label for="inpIcuBeds">ICU Beds <span style="font-weight:400;text-transform:none">(optional)</span></label>
         <input type="number" id="inpIcuBeds" placeholder="e.g. 30" min="0">
         <div class="form-note">Total ICU bed capacity</div>
       </div>
-
       <div class="form-group">
-        <label for="inpIcuOccupied">ICU Occupied (optional)</label>
+        <label for="inpIcuOccupied">ICU Occupied <span style="font-weight:400;text-transform:none">(optional)</span></label>
         <input type="number" id="inpIcuOccupied" placeholder="e.g. 18" min="0">
         <div class="form-note">ICU beds currently in use</div>
       </div>
-
     </div>
 
-    <div class="form-group" style="margin-bottom: 28px; max-width: 280px;">
+    <div class="form-group" style="margin-bottom:28px;max-width:300px">
       <label for="inpStatus">Emergency Status</label>
       <select id="inpStatus">
         <option value="normal">Normal — routine operations</option>
@@ -101,52 +95,16 @@
 
     <div class="save-bar">
       <button class="btn btn-primary btn-lg" id="saveBtn" onclick="submitAdminData()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
         Save &amp; Publish Data
       </button>
       <span class="save-message" id="saveMessage"></span>
     </div>
-
   </div>
 
-
-  <!-- ── AI PREDICTION PANEL (shown after save) ── -->
-  <div class="admin-prediction-card" id="adminPredPanel" style="display:none;">
-    <h3>AI Prediction Results</h3>
-    <div class="admin-stats-row">
-
-      <div class="admin-stat">
-        <div class="admin-stat-value" id="adminPredPat">—</div>
-        <div class="admin-stat-label">Predicted Patients</div>
-      </div>
-
-      <div class="admin-stat">
-        <div class="admin-stat-value" id="adminPredBeds">—</div>
-        <div class="admin-stat-label">Beds Required</div>
-      </div>
-
-      <div class="admin-stat">
-        <div class="admin-stat-value" id="adminPredDoc">—</div>
-        <div class="admin-stat-label">Doctors Needed</div>
-      </div>
-
-      <div class="admin-stat">
-        <div style="margin-bottom: 6px;">
-          <span class="admin-risk-badge" id="adminRiskBadge">—</span>
-        </div>
-        <div class="admin-stat-label">Risk Level</div>
-      </div>
-
-    </div>
-
-    <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
-      <p style="font-size: 14px; color: rgba(255,255,255,0.75);" id="adminPredMsg"></p>
-    </div>
-  </div>
-
-
-  <!-- ── AVAILABLE BEDS FROM SUBMITTED DATA ── -->
-  <div class="occupancy-bar-wrap" id="adminOccBar" style="display:none;">
-    <label>Live Bed Occupancy after this update</label>
+  <!-- Live Occupancy Bar -->
+  <div class="occupancy-bar-wrap" id="adminOccBar" style="display:none">
+    <label>Live Bed Occupancy</label>
     <div class="occ-bar">
       <div class="occ-fill" id="adminOccFill"></div>
     </div>
@@ -157,31 +115,85 @@
     </div>
   </div>
 
+  <!-- AI Prediction Panel -->
+  <div class="admin-prediction-card" id="adminPredPanel" style="display:none">
+    <h3>AI Prediction Results</h3>
+    <div class="admin-stats-row">
+      <div class="admin-stat">
+        <div class="admin-stat-value" id="adminPredPat">—</div>
+        <div class="admin-stat-label">Predicted Patients</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-value" id="adminPredBeds">—</div>
+        <div class="admin-stat-label">Beds Required</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-value" id="adminPredDoc">—</div>
+        <div class="admin-stat-label">Doctors Needed</div>
+      </div>
+      <div class="admin-stat">
+        <div style="margin-bottom:6px">
+          <span class="admin-risk-badge" id="adminRiskBadge">—</span>
+        </div>
+        <div class="admin-stat-label">Risk Level</div>
+      </div>
+    </div>
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1)">
+      <p style="font-size:14px;color:rgba(255,255,255,0.75)" id="adminPredMsg"></p>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    SwasthaSevaAI Admin Panel · Data is published live to the public dashboard
+  </div>
+
 </main>
 
-
 <script src="script.js"></script>
-
-<!-- Update the occupancy bar when inputs change -->
+<script src="chatbot.js"></script>
 <script>
+  // Live occupancy bar while typing
   function liveUpdateOccBar() {
-    const total = parseInt(document.getElementById("inpTotalBeds")?.value || 0);
-    const occ   = parseInt(document.getElementById("inpOccupied")?.value || 0);
+    const total = parseInt(document.getElementById('inpTotalBeds')?.value || 0);
+    const occ   = parseInt(document.getElementById('inpOccupied')?.value || 0);
     if (total > 0 && occ >= 0) {
       const pct = Math.min(100, Math.round((occ / total) * 100));
-      const fillEl = document.getElementById("adminOccFill");
-      const pctEl  = document.getElementById("adminOccPct");
-      const barEl  = document.getElementById("adminOccBar");
-      if (fillEl)  { fillEl.style.width = pct + "%"; fillEl.className = "occ-fill" + (pct > 85 ? " high" : pct > 70 ? " medium" : ""); }
-      if (pctEl)   pctEl.textContent = pct + "%";
-      if (barEl)   barEl.style.display = "block";
+      const fillEl = document.getElementById('adminOccFill');
+      const pctEl  = document.getElementById('adminOccPct');
+      const barEl  = document.getElementById('adminOccBar');
+      if (fillEl) { fillEl.style.width = pct + '%'; fillEl.className = 'occ-fill' + (pct > 85 ? ' high' : pct > 70 ? ' medium' : ''); }
+      if (pctEl)  pctEl.textContent = pct + '%';
+      if (barEl)  barEl.style.display = 'block';
     }
   }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    ["inpTotalBeds", "inpOccupied"].forEach(id => {
-      document.getElementById(id)?.addEventListener("input", liveUpdateOccBar);
+  document.addEventListener('DOMContentLoaded', () => {
+    ['inpTotalBeds','inpOccupied'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', liveUpdateOccBar);
     });
+    // Animate stat values when prediction panel appears
+    const observer = new MutationObserver(() => {
+      const panel = document.getElementById('adminPredPanel');
+      if (panel && panel.style.display !== 'none') {
+        ['adminPredPat','adminPredBeds','adminPredDoc'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el && el.textContent !== '—') {
+            const val = parseInt(el.textContent);
+            if (!isNaN(val)) {
+              el.textContent = '0';
+              let start = null;
+              function step(ts) {
+                if (!start) start = ts;
+                const p = Math.min((ts - start) / 700, 1);
+                el.textContent = Math.round(val * p);
+                if (p < 1) requestAnimationFrame(step);
+              }
+              requestAnimationFrame(step);
+            }
+          }
+        });
+      }
+    });
+    observer.observe(document.getElementById('adminPredPanel'), { attributes: true, attributeFilter: ['style'] });
   });
 </script>
 

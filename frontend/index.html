@@ -9,9 +9,6 @@
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════
-     HEADER
-═══════════════════════════════════════ -->
 <header class="site-header">
   <div class="header-brand">
     <div class="header-logo">
@@ -29,21 +26,39 @@
       <span class="live-dot"></span>
       Live Monitoring
     </div>
-    <button class="btn btn-outline" onclick="openAdminLogin()">Hospital Admin Login</button>
+    <button class="btn btn-outline" onclick="openAdminLogin()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Hospital Admin Login
+    </button>
   </div>
 </header>
 
-
-<!-- ═══════════════════════════════════════
-     MAIN CONTENT
-═══════════════════════════════════════ -->
 <main class="page-wrapper">
 
+  <!-- Network Stats Bar -->
+  <div class="network-bar reveal">
+    <div class="network-stat">
+      <div class="network-stat-value" id="netHospitals">5</div>
+      <div class="network-stat-label">States Covered</div>
+    </div>
+    <div class="network-stat">
+      <div class="network-stat-value" id="netDistricts">15</div>
+      <div class="network-stat-label">Districts</div>
+    </div>
+    <div class="network-stat">
+      <div class="network-stat-value" id="netTotal">30+</div>
+      <div class="network-stat-label">Hospitals</div>
+    </div>
+    <div class="network-stat">
+      <div class="network-stat-value" id="netReporting">—</div>
+      <div class="network-stat-label">Reporting Live</div>
+    </div>
+  </div>
+
   <!-- Hospital Selector -->
-  <div class="selector-card">
+  <div class="selector-card reveal">
     <h2>Select Hospital to Monitor</h2>
     <div class="selector-row">
-
       <div class="form-group">
         <label for="stateSelect">State</label>
         <select id="stateSelect" onchange="updateDistricts()">
@@ -55,21 +70,18 @@
           <option value="Maharashtra">Maharashtra</option>
         </select>
       </div>
-
       <div class="form-group">
         <label for="districtSelect">District</label>
         <select id="districtSelect" onchange="updateHospitals()">
           <option value="">Select District</option>
         </select>
       </div>
-
       <div class="form-group">
         <label for="hospitalSelect">Hospital</label>
         <select id="hospitalSelect">
           <option value="">Select Hospital</option>
         </select>
       </div>
-
       <div class="form-group">
         <label>Conditions</label>
         <div class="toggle-group">
@@ -81,53 +93,68 @@
           </label>
         </div>
       </div>
-
       <div class="form-group">
         <label>&nbsp;</label>
         <button class="btn btn-primary btn-lg" id="predictBtn" onclick="runPrediction()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
           Run AI Prediction
         </button>
       </div>
-
     </div>
   </div>
 
-  <!-- Alert / Suggestion Box -->
+  <!-- Hospital Info Banner (shown after selection) -->
+  <div class="hospital-info-banner" id="hospitalBanner">
+    <div class="hospital-info-left">
+      <div class="hospital-info-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9,22 9,12 15,12 15,22"/>
+        </svg>
+      </div>
+      <div>
+        <div class="hospital-info-name" id="bannerHospitalName">—</div>
+        <div class="hospital-info-location" id="bannerLocation">—</div>
+      </div>
+    </div>
+    <div class="hospital-info-right">
+      <span class="last-updated-tag" id="bannerUpdated" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.5)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="bannerUpdatedText">Not yet updated</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Alert Box -->
   <div class="alert-box" id="alertBox"></div>
 
-  <!-- Prediction Result Cards -->
+  <!-- Stat Cards -->
   <div class="section-label">Prediction Results</div>
   <div class="results-grid">
-
-    <div class="stat-card">
+    <div class="stat-card reveal" data-tooltip="AI-predicted patient count with surge factors applied">
       <div class="stat-label">Predicted Patients</div>
       <div class="stat-value" id="predPatients">—</div>
     </div>
-
-    <div class="stat-card risk-card">
+    <div class="stat-card risk-card reveal" data-tooltip="Risk classification: LOW / MEDIUM / HIGH">
       <div class="stat-label">Risk Level</div>
       <div class="stat-value" id="predRisk">—</div>
     </div>
-
-    <div class="stat-card">
+    <div class="stat-card reveal" data-tooltip="Recommended doctors based on 1:15 patient ratio">
       <div class="stat-label">Doctors Needed</div>
       <div class="stat-value" id="predDoctors">—</div>
     </div>
-
-    <div class="stat-card">
+    <div class="stat-card reveal" data-tooltip="Estimated inpatient bed requirement (60% of predicted)">
       <div class="stat-label">Beds Required</div>
       <div class="stat-value" id="predBeds">—</div>
     </div>
-
-    <div class="stat-card">
+    <div class="stat-card reveal" data-tooltip="Total beds minus currently occupied beds">
       <div class="stat-label">Available Beds</div>
       <div class="stat-value" id="predAvailBeds">—</div>
     </div>
-
   </div>
 
-  <!-- Bed Occupancy Bar -->
-  <div class="occupancy-bar-wrap">
+  <!-- Occupancy Bar -->
+  <div class="occupancy-bar-wrap reveal">
     <label>Current Bed Occupancy</label>
     <div class="occ-bar">
       <div class="occ-fill" id="occFill"></div>
@@ -139,60 +166,112 @@
     </div>
   </div>
 
-  <!-- 7-Day Forecast Chart -->
-  <div class="chart-card">
-    <h3>7-Day Patient Load Forecast</h3>
+  <!-- Chart -->
+  <div class="chart-card reveal">
+    <div class="chart-card-header">
+      <h3>7-Day Patient Load Forecast</h3>
+      <span id="chartLegend" style="font-size:12px;color:var(--text-muted);display:none">
+        Trend based on current risk level
+      </span>
+    </div>
     <canvas id="forecastChart" height="90"></canvas>
-    <p class="hint" id="chartHint">Run a prediction to see the 7-day forecast</p>
+    <p class="hint" id="chartHint">Select a hospital and run prediction to see the 7-day forecast</p>
   </div>
 
+  <div class="footer-note">
+    © 2026 SwasthaSevaAI. All Rights Reserved.
+    <br>
+    Built by Mansi and Nikita, IIT Patna
+    <br>
+    Foundation for the National Health Intelligence Network (NHIN)
+    <br><br>
+    <a href="https://github.com/Mansi-k07/SwasthaSevaAI" target="_blank">GitHub</a> ·
+    <a href="https://swasthasevaai-backend-f15e.onrender.com/docs" target="_blank">API Docs</a>
+</div>
 </main>
 
-
-<!-- ═══════════════════════════════════════
-     ADMIN LOGIN MODAL
-     BUG FIXED: original modal used position:fixed which caused layout
-     collapse. Now uses a flex backdrop in normal document flow.
-═══════════════════════════════════════ -->
+<!-- Admin Login Modal -->
 <div class="modal-backdrop" id="adminModal">
   <div class="modal-box">
     <h3>Hospital Admin Login</h3>
     <p>Select your hospital and enter your password to access the admin panel.</p>
-
     <div class="form-group">
       <label for="adminHospitalSelect">Your Hospital</label>
       <select id="adminHospitalSelect">
         <option value="">Select your hospital</option>
       </select>
     </div>
-
-    <div class="form-group" style="margin-top: 14px;">
+    <div class="form-group" style="margin-top:14px">
       <label for="adminPasswordInput">Password</label>
       <input type="password" id="adminPasswordInput" placeholder="Enter password">
-      <div class="form-note">Default format: hospitalname@swastha (e.g. pmchpatna@swastha)</div>
+      <div class="form-note">Format: hospitalname@swastha &nbsp;e.g. <code>pmchpatna@swastha</code></div>
     </div>
-
     <div class="error-msg" id="loginError"></div>
-
     <div class="modal-actions">
       <button class="btn btn-navy" onclick="loginAdmin()">Login</button>
-      <button class="btn btn-outline" style="color:var(--text-secondary); border-color:var(--border);" onclick="closeAdminLogin()">Cancel</button>
+      <button class="btn btn-ghost" onclick="closeAdminLogin()">Cancel</button>
     </div>
   </div>
 </div>
 
-
 <script src="script.js"></script>
+<script src="chatbot.js"></script>
 
-<!-- Hide chart hint once a prediction runs -->
 <script>
-  const origRunPrediction = window.runPrediction;
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Show hospital banner when hospital selected
+  document.getElementById('hospitalSelect').addEventListener('change', function() {
+    const h = this.value;
+    const d = document.getElementById('districtSelect').value;
+    const s = document.getElementById('stateSelect').value;
+    const banner = document.getElementById('hospitalBanner');
+    if (h) {
+      document.getElementById('bannerHospitalName').textContent = h;
+      document.getElementById('bannerLocation').textContent = d + ', ' + s;
+      banner.classList.add('visible');
+    } else {
+      banner.classList.remove('visible');
+    }
+  });
+
+  // Animate network reporting count
+  async function loadNetworkCount() {
+    try {
+      const res = await fetch('https://swasthasevaai-backend-f15e.onrender.com/hospitals');
+      if (res.ok) {
+        const d = await res.json();
+        animateCount('netReporting', 0, d.count, 600);
+      }
+    } catch(e) {
+      document.getElementById('netReporting').textContent = '—';
+    }
+  }
+  function animateCount(id, from, to, duration) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const start = performance.now();
+    function step(now) {
+      const p = Math.min((now - start) / duration, 1);
+      el.textContent = Math.round(from + (to - from) * p);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  loadNetworkCount();
+
+  // Hide chart hint after prediction
+  const _orig = window.runPrediction;
   if (typeof runPrediction === 'function') {
-    const origFn = runPrediction;
     window.runPrediction = async function() {
-      await origFn();
-      const hint = document.getElementById("chartHint");
-      if (hint) hint.style.display = "none";
+      await runPrediction();
+      document.getElementById('chartHint').style.display = 'none';
+      document.getElementById('chartLegend').style.display = 'block';
     };
   }
 </script>
