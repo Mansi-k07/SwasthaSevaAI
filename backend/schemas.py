@@ -20,3 +20,4 @@ class HospitalUpdate(BaseModel):
     icu_beds: Optional[int] = 0
     icu_occupied: Optional[int] = 0
     emergency_status: Optional[str] = "normal"
+
